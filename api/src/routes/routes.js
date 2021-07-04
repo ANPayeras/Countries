@@ -1,77 +1,84 @@
 
 const axios = require('axios');
-const { Country } = require('../db');
+const { Country, Activity } = require('../db');
 
-const countries = async (_req, res) => {
-    const response = await axios.get('https://restcountries.eu/rest/v2/all')
+const allCountries = async (_req, _res, next) => {
+    try {
+        const response = await axios.get('https://restcountries.eu/rest/v2/all')
+        const paises = response.data;
 
-    const name = response.data.map(pais => {
-        return pais.name
-    })
+        for (let i = 0; i < paises.length; i++) {
 
-    const id = response.data.map(pais => {
-        return pais.alpha3Code
-    })
-
-    const flag = response.data.map(pais => {
-        return pais.flag
-    })
-    const region = response.data.map(pais => {
-        return pais.region
-    })
-    const capital = response.data.map(pais => {
-        return pais.capital
-    })
-    const subregion = response.data.map(pais => {
-        return pais.subregion
-    })
-    const area = response.data.map(pais => {
-        return pais.area
-    })
-    const population = response.data.map(pais => {
-        return pais.population
-    })
-
-
-
-    Country.create({
-        id: id,
-        name: name,
-        flagimage: flag,
-        continente: region,
-        capital: capital,
-        subregion: subregion,
-        area: area,
-        population: population
-    })
-    // console.log(response)
-    /* const resultado = response.json();
-    console.log('Hola mundo')
-    res.json(resultado) */
-    res.send(id)
+            Country.create({
+                id: paises[i].alpha3Code,
+                name: paises[i].name,
+                flagimage: paises[i].flag,
+                continente: paises[i].region,
+                capital: paises[i].capital,
+                subRegion: paises[i].subregion,
+                area: paises[i].area,
+                population: paises[i].population
+            })
+        }
+    } catch (error) {
+        next(error);
+    }
 }
 
-const countriesById = (req, res) => {
-    const { id } = req.params;
-    console.log('Hola mundo')
-    res.send('Hola mundo' + id)
+const countries = async (req, res, next) => {
+    allCountries();
+    if (req.query.name) {
+        try {
+            const country = await Country.findAll({ where: { name: req.query.name }, attributes: { exclude: ['createdAt', 'updatedAt'] } })
+            if (country[0]) {
+                res.json(country);
+            } else {
+                res.json('El pais no existe')
+            }
+        } catch (error) {
+            next(error)
+        }
+    } else {
+        Country.findAll({ limit: 10 })
+            .then(r => res.json(r))
+            .catch(error => next(error))
+    }
 }
 
-const countriesByName = (req, res) => {
-    console.log('Hola mundo')
-    res.send('Hola mundo' + req.query.name)
+/* const countries = async (_req, res, next) => {
+    allCountries();
+    try {
+
+        const countries = await Country.findAll({ limit: 10 });
+        res.json(countries)
+
+    } catch (error) {
+        next(error);
+    }
+} */
+
+const countriesById = (req, res, next) => {
+    allCountries();
+    const { idPais } = req.params;
+    Country.findOne({
+        where: { id: idPais },
+        attributes: ['id', 'name', 'flagimage', 'continente', 'capital', 'subRegion', 'area', 'population'],
+        include: [Activity]
+    })
+        .then(respuesta => { res.json({ respuesta }) })
+        .catch(error => next(error))
 }
 
 const createActivity = (req, res) => {
+    allCountries();
     const { activity, hour } = req.body
     console.log('Hola mundo')
     res.json({ msg: 'actividad agregada' })
 }
 
-
 module.exports = {
+    allCountries,
     countries,
     countriesById,
-    countriesByName,
     createActivity
 }
