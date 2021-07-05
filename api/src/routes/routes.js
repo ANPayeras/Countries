@@ -67,24 +67,23 @@ const countriesById = (req, res, next) => {
         .catch(error => next(error))
 }
 
-const createActivity = async (req, res) => {
+const createActivity = async (req, res, next) => {
     const { name, dificulty, duration, season, countryId } = req.body
-    // const { id, name, flagimage, continente, capital, subRegion, area, population } = req.body
-    const activity = await Activity.create({ name, dificulty, duration, season })
-    // await Activity.findOrCreate({ where: { name, dificulty, duration, season } }),
+    try {
+        const activity = await Activity.create({ name, dificulty, duration, season })
+        let idPaises;
+        if (Array.isArray(countryId)) {
+            idPaises = await Promise.all(countryId.map(value => Country.findByPk(value)))
+        } else {
+            idPaises = await Promise.all([Country.findByPk(countryId)])
+        }
 
-    /* let [activity] = await Promise.all([
-        Activity.Create({ where: { name, dificulty, duration, season } })
-    ])  */
+        await activity.setCountries(idPaises); // seteamos la relacion de la actividad recien creada con los paises pasados por body
 
-    // console.log(activity)
-
-    let idResult;
-    idResult = await Promise.all(countryId.map(value => Country.findByPk(value)))
-    console.log(idResult)
-    const a = await activity.setCountries(idResult); 
-    console.log(a)
-    res.json({ msg: 'Actividad Agregada' })
+        res.json({ msg: 'Actividad Agregada' })
+    } catch (error) {
+        next(error)
+    }
 }
 
 module.exports = {
