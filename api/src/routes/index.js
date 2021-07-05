@@ -4,8 +4,7 @@ const { countries, countriesById, createActivity, allCountries } = require('./ro
 // Ejemplo: const authRouter = require('./auth.js');
 
 
-
-const router = Router(); 
+const router = Router();
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
@@ -14,4 +13,5 @@ router.get('/countries', countries)
 router.get('/countries/:idPais', countriesById)
 router.post('/activity', createActivity)
 
+allCountries();
 module.exports = router;

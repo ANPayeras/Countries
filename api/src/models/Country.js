@@ -6,41 +6,33 @@ module.exports = (sequelize) => {
   sequelize.define('country', {
     id: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      primaryKey: true
+      primaryKey: true,
+      allowNull: false
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     flagimage: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     continente: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     capital: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     subRegion: {
-      type: DataTypes.STRING,
-      unique: true
+      type: DataTypes.STRING
     },
     area: {
-      type: DataTypes.STRING,
-      unique: true
+      type: DataTypes.STRING
     },
     population: {
-      type: DataTypes.STRING,
-      unique: true
+      type: DataTypes.STRING
     }
-  });
+  }, { timestamps: false });
 };

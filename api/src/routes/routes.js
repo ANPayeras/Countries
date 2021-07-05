@@ -26,10 +26,9 @@ const allCountries = async (_req, _res, next) => {
 }
 
 const countries = async (req, res, next) => {
-    allCountries();
     if (req.query.name) {
         try {
-            const country = await Country.findAll({ where: { name: req.query.name }, attributes: { exclude: ['createdAt', 'updatedAt'] } })
+            const country = await Country.findAll({ where: { name: req.query.name } })
             if (country[0]) {
                 res.json(country);
             } else {
@@ -58,7 +57,6 @@ const countries = async (req, res, next) => {
 } */
 
 const countriesById = (req, res, next) => {
-    allCountries();
     const { idPais } = req.params;
     Country.findOne({
         where: { id: idPais },
@@ -69,11 +67,24 @@ const countriesById = (req, res, next) => {
         .catch(error => next(error))
 }
 
-const createActivity = (req, res) => {
-    allCountries();
-    const { activity, hour } = req.body
-    console.log('Hola mundo')
-    res.json({ msg: 'actividad agregada' })
+const createActivity = async (req, res) => {
+    const { name, dificulty, duration, season, countryId } = req.body
+    // const { id, name, flagimage, continente, capital, subRegion, area, population } = req.body
+    const activity = await Activity.create({ name, dificulty, duration, season })
+    // await Activity.findOrCreate({ where: { name, dificulty, duration, season } }),
+
+    /* let [activity] = await Promise.all([
+        Activity.Create({ where: { name, dificulty, duration, season } })
+    ])  */
+
+    // console.log(activity)
+
+    let idResult;
+    idResult = await Promise.all(countryId.map(value => Country.findByPk(value)))
+    console.log(idResult)
+    const a = await activity.setCountries(idResult); 
+    console.log(a)
+    res.json({ msg: 'Actividad Agregada' })
 }
 
 module.exports = {

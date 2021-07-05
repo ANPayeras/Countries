@@ -35,8 +35,8 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { Country, Activity } = sequelize.models;
 
 // Aca vendrian las relaciones
-Country.belongsToMany(Activity, { through: 'countryActivity' })
-Activity.belongsToMany(Country, { through: 'countryActivity' })
+Country.belongsToMany(Activity, { through: 'country_activity' })
+Activity.belongsToMany(Country, { through: 'country_activity' })
 
 const autenticacion = async () => {
   try {
@@ -49,11 +49,9 @@ const autenticacion = async () => {
 
 autenticacion()
 
-
-
-
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize,     // para importar la conexión { conn } = require('./db.js');
-  Country
+  Country,
+  Activity
 };
