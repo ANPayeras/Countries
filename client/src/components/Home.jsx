@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import UserContext from '../context/UserContext';
 
+// Filtros Bar
+import Filtros from './Filtros';
 
 function Home() {
 
-    const { getSearchedCountry, getAllCountries, allCountries } = useContext(UserContext);
+    const { getAllCountries } = useContext(UserContext);
 
     const [paises, setPaises] = useState([]);
     const [page, setPage] = useState({
@@ -65,49 +66,9 @@ function Home() {
         })
     }
 
-    const handlerSubmit = (e) => {
-        e.preventDefault();
-        if (!e.target.value) return null
-    }
-
-    const handlerChange = (e) => {
-        let target = e.target.value
-        if (target) {
-            let buscando = allCountries.filter(e => e.name === target)
-            console.log(buscando[0]);
-            if (buscando[0]) {
-                getSearchedCountry(buscando[0].name)
-            }
-        } else {
-            return null
-        }
-    }
-
-    const handlerOption = (e) => {
-        let target = e.target.value;
-        if (target === 'Continente') {
-            let filtro = allCountries.filter(e => e.name && e.continente)
-            console.log(filtro)
-        }
-    }
-
     return (
         <div>
-            <h1>Home</h1>
-
-            <h2>Buscar Por:</h2>
-            <select onChange={handlerOption}>
-                <option></option>
-                <option value="Continente" >Contiente</option>
-                <option value="Actividad Turistica">Actividad Turistica</option>
-            </select>
-
-            <form action="" onSubmit={handlerSubmit}>
-                <input type="text" placeholder='Buscar Pais' onChange={handlerChange} name='input' />
-                <Link to='/paisesbuscados'>
-                    <button>Buscar</button>
-                </Link>
-            </form>
+            <Filtros />
             <button onClick={antPage}>Anterior</button>
             <button onClick={sigPage}>Siguiente</button>
             <h3>{page.actualpage} - {page.totalPages} </h3>
