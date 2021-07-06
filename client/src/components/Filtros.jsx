@@ -43,6 +43,7 @@ function Filtros() {
 
     const handlerOptionActivity = (e) => {
         let target = e.target.value;
+        console.log(target)
         getActivitiesByCountry(target)
     }
     // Sacando los repetidos
@@ -68,8 +69,6 @@ function Filtros() {
             <h2>Buscar Por Contienente:</h2>
 
             <select onChange={handlerOptionContinent}>
-                <option></option>
-
                 {
                     resultContinentes.map(e => (
                         <option value={e}>{e}</option>

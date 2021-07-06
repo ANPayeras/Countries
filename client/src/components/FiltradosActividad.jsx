@@ -6,39 +6,42 @@ import axios from 'axios';
 function FiltradosActividad() {
 
     const { activitiesByCountry } = useContext(UserContext);
+    console.log(activitiesByCountry)
 
-    useEffect(() => {
-        paisesid()
-    }, [])
+    let actividades = activitiesByCountry.map(e => {
+        return e.name
+    })
+    const actividadesFiltradas = new Set(actividades);
+    let resultActividades = [...actividadesFiltradas];
+    // console.log(resultActividades)
 
-    const paisesid = async () => {
+   
 
-        console.log(activitiesByCountry)
-        const paises = activitiesByCountry.map(e => e.countries)
-        console.log(paises);
-        let duplicados = [];
-        const a = paises.map(e => e.map(el => duplicados.push(el.id)))
-        console.log(a)
+    let paises = activitiesByCountry.map(e => e.countries)
+    console.log(paises) // array con array de nombres
 
-        console.log(duplicados)
+    let a = paises.join(',')
+    console.log(a)
 
-        const continentesFiltrados = new Set(duplicados);
-        let resultContinentes = [...continentesFiltrados];
-        console.log(resultContinentes)
 
-        // const result = resultContinentes.map(e => axios.get(`http://localhost:3001/countries/${e}`));
-        for (let i = 0; i < resultContinentes.length; i++) {
-            var result = await axios.get(`http://localhost:3001/countries/${resultContinentes[i]}`)
-            var otro = result.data
-            
-        }
-        console.log(otro)
-    }
+    let algo = [];
+    paises && paises.map(e => algo.push(e[0].name))
+
+    const paisesFiltrados = new Set(algo);
+    let resultPaises = [...paisesFiltrados];
+
+    console.log(resultPaises)
 
     return (
         <div>
             <Filtros />
             <ul>
+                <li>{resultActividades}</li>
+                {
+                    resultPaises.map(e => (
+                        <li>{e}</li>
+                    ))
+                }
 
 
             </ul>

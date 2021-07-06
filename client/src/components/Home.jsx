@@ -7,7 +7,7 @@ import Filtros from './Filtros';
 
 function Home() {
 
-    const { getAllCountries } = useContext(UserContext);
+    const { getAllCountries, getCountryById } = useContext(UserContext);
 
     const [paises, setPaises] = useState([]);
     const [page, setPage] = useState({
