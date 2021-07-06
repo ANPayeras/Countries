@@ -36,7 +36,7 @@ function Home() {
         })
     }
 
-    const sigPage = async (e) => {
+    const sigPage = async () => {
         let { nextPage, totalPages } = page;
         if (nextPage >= totalPages) return null
 
@@ -83,10 +83,8 @@ function Home() {
                     ))
                 }
             </ul>
-
-
         </div>
     )
 }
 
-export default Home
+export default Home;

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import UserContext from '../context/UserContext';
@@ -6,83 +5,32 @@ import './filtros.css'
 
 function Filtros() {
 
-    const { getSearchedCountry, getAllCountries, allCountries, getActivities, activities } = useContext(UserContext);
-
-    const [paises, setPaises] = useState([]);
-    const [page, setPage] = useState({
-        actualpage: 0,
-        nextPage: 0,
-        prevPage: 0,
-        totalPages: 0
-    })
-    const [estado, setEstado] = useState({
-        porContinente: [],
-        porActividad: []
-    })
+    const { getSearchedCountry, getAllCountries, allCountries, getActivities, activities, getContinents, getActivitiesByCountry } = useContext(UserContext);
+    // console.log(activitiesByCountry)
 
     useEffect(() => {
-        countriesByPage();
         getAllCountries();
         getActivities();
     }, [])
 
-    const countriesByPage = async () => {
-        const listadoDePaises = await axios.get(`http://localhost:3001/countries?page=0`);
-        const datos = listadoDePaises.data.data;
-        const totalPages = Math.ceil(listadoDePaises.data.total / listadoDePaises.data.data.length)
-        setPaises(datos);
-        setPage({
-            ...page,
-            actualpage: listadoDePaises.data.currentPage + 1,
-            nextPage: listadoDePaises.data.nextPage,
-            prevPage: listadoDePaises.data.previousPage,
-            totalPages: totalPages
-        })
-    }
-
-    const sigPage = async (e) => {
-        let { nextPage, totalPages } = page;
-        if (nextPage >= totalPages) return null
-
-        const listadoDePaises = await axios.get(`http://localhost:3001/countries?page=${nextPage}`);
-        const datos = listadoDePaises.data.data;
-        setPaises(datos);
-        setPage({
-            ...page,
-            actualpage: listadoDePaises.data.currentPage + 1,
-            nextPage: listadoDePaises.data.nextPage,
-            prevPage: listadoDePaises.data.previousPage
-        })
-    }
-
-    const antPage = async (e) => {
-        let { prevPage } = page;
-        if (prevPage < 0) return null;
-
-        const listadoDePaises = await axios.get(`http://localhost:3001/countries?page=${prevPage}`);
-        const datos = listadoDePaises.data.data;
-        setPaises(datos);
-        setPage({
-            ...page,
-            actualpage: listadoDePaises.data.currentPage + 1,
-            nextPage: listadoDePaises.data.nextPage,
-            prevPage: listadoDePaises.data.previousPage
-        })
-    }
-
     const handlerSubmit = (e) => {
         e.preventDefault();
+
 
     }
 
     const handlerChange = (e) => {
         let target = e.target.value
+        console.log(target)
         if (target) {
-            let buscando = allCountries.filter(e => e.name === target)
-            console.log(buscando[0]);
-            if (buscando[0]) {
-                getSearchedCountry(buscando[0].name)
-            }
+            // let buscando = allCountries.filter(e => e.name === target)
+            // console.log(buscando)
+            getSearchedCountry(target)
+            /*   if (buscando[0]) {
+                  getSearchedCountry(buscando[0].name)
+              } else {
+                  console.log('No hay pais')
+              } */
         } else {
             return null
         }
@@ -90,23 +38,12 @@ function Filtros() {
 
     const handlerOptionContinent = (e) => {
         let target = e.target.value;
-
-        let filtro = allCountries.filter(e => e.continente === target)
-        setEstado({
-            ...estado,
-            porContinente: filtro
-        })
+        getContinents(target);
     }
 
     const handlerOptionActivity = (e) => {
         let target = e.target.value;
-        console.log(target)
-        let filtro = activities.filter(e => e.name === target)
-        setEstado({
-            ...estado,
-            porActividad: filtro
-        })
-        console.log(filtro)
+        getActivitiesByCountry(target)
     }
     // Sacando los repetidos
     // Continente
@@ -140,7 +77,7 @@ function Filtros() {
 
                 }
             </select>
-            <Link>
+            <Link to='/filtradoscontinente'>
                 <button>Buscar</button>
             </Link>
             <h2>Buscar Por Actividad Turistica:</h2>
@@ -154,7 +91,7 @@ function Filtros() {
 
                 }
             </select>
-            <Link>
+            <Link to='/filtradosactividad'>
                 <button>Buscar</button>
             </Link>
 
