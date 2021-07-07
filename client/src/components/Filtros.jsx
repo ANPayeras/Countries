@@ -58,7 +58,9 @@ function Filtros() {
     let resultActividades = [...actividadesFiltradas];
 
     // Orfer Filters
-    const [orderFilter, setOrderFilter] = useState({})
+    const [orderFilter, setOrderFilter] = useState({
+        select: true
+    })
     console.log(orderFilter)
     const orderHandler = (e) => {
         setOrderFilter({
@@ -66,7 +68,8 @@ function Filtros() {
             [e.target.name]: e.target.value
         })
     }
-    const orderSubmit = () => {
+    const orderSubmit = (e) => {
+        e.preventDefault();
         const { option1, option2 } = orderFilter
         if (option1 && option2) {
             order(option1, option2)
@@ -85,7 +88,7 @@ function Filtros() {
                     <option value="Nombre">Nombre</option>
                     <option value="Poblacion">Poblacion</option>
                 </select>
-                <select hidden={false} name='option2'>
+                <select hidden={orderFilter.option1 ? false : true} name='option2'>
                     <option>Seleccionar</option>
                     <option value="Ascendente">Ascendente</option>
                     <option value="Descendente">Descendente</option>

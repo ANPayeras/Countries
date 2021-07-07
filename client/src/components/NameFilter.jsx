@@ -4,7 +4,7 @@ import UserContext from '../context/UserContext';
 
 function NameFilter() {
     const { orderAsc, orderDesc } = useContext(UserContext);
-    console.log(orderAsc)
+
     return (
         <div>
             <Filtros />
