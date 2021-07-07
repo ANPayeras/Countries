@@ -7,7 +7,7 @@ import Filtros from './Filtros';
 
 function Home() {
 
-    const { getAllCountries, getCountryById } = useContext(UserContext);
+    const { getAllCountries } = useContext(UserContext);
 
     const [paises, setPaises] = useState([]);
     const [page, setPage] = useState({
@@ -69,6 +69,7 @@ function Home() {
     return (
         <div>
             <Filtros />
+            <h1>HOME</h1>
             <button onClick={antPage}>Anterior</button>
             <button onClick={sigPage}>Siguiente</button>
             <h3>{page.actualpage} - {page.totalPages} </h3>

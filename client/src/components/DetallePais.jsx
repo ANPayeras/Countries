@@ -4,14 +4,14 @@ import UserContext from '../context/UserContext';
 function DetallePais({ match }) {
 
     const { countryById, getCountryById } = useContext(UserContext);
-    console.log(countryById.activities)
+
     useEffect(() => {
         getCountryById(match.params.id)
     }, [])
+
     return (
         <div>
             Detalle Pais
-
 
             <div key={countryById.id}>
                 <h1>{countryById.name}</h1>
@@ -23,7 +23,7 @@ function DetallePais({ match }) {
                 <h1>Area: {countryById.area}</h1>
                 <img src={countryById.flagimage} alt="" />
                 Actividades:
-                {
+                {countryById.activities ?
                     countryById.activities.map(e => (
                         <div key={e.id}>
                             <h3>{e.name}</h3>
@@ -32,12 +32,9 @@ function DetallePais({ match }) {
                             <h3>{e.season}</h3>
                         </div>
                     ))
+                    : <h1>El Pais no tiene actividades</h1>
                 }
             </div>
-
-
-
-
         </div>
     )
 }

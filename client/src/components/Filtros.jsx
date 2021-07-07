@@ -5,7 +5,7 @@ import './filtros.css'
 
 function Filtros() {
 
-    const { getSearchedCountry, getAllCountries, allCountries, getActivities, activities, getContinents, getActivitiesByCountry } = useContext(UserContext);
+    const { getSearchedCountry, getAllCountries, allCountries, getActivities, activities, getContinents, getActivitiesByCountry, order } = useContext(UserContext);
     // console.log(activitiesByCountry)
 
     useEffect(() => {
@@ -15,8 +15,6 @@ function Filtros() {
 
     const handlerSubmit = (e) => {
         e.preventDefault();
-
-
     }
 
     const handlerChange = (e) => {
@@ -43,7 +41,6 @@ function Filtros() {
 
     const handlerOptionActivity = (e) => {
         let target = e.target.value;
-        console.log(target)
         getActivitiesByCountry(target)
     }
     // Sacando los repetidos
@@ -60,11 +57,43 @@ function Filtros() {
     const actividadesFiltradas = new Set(actividades);
     let resultActividades = [...actividadesFiltradas];
 
+    // Orfer Filters
+    const [orderFilter, setOrderFilter] = useState({})
+    console.log(orderFilter)
+    const orderHandler = (e) => {
+        setOrderFilter({
+            ...orderFilter,
+            [e.target.name]: e.target.value
+        })
+    }
+    const orderSubmit = () => {
+        const { option1, option2 } = orderFilter
+        if (option1 && option2) {
+            order(option1, option2)
+        }
+    }
     //---
     return (
-        <div className="filtros">
-            <h1>Home</h1>
 
+        <div className="filtros">
+
+
+            <h2>Ordenar por:</h2>
+            <div onChange={orderHandler}>
+                <select name='option1'>
+                    <option>Seleccionar</option>
+                    <option value="Nombre">Nombre</option>
+                    <option value="Poblacion">Poblacion</option>
+                </select>
+                <select hidden={false} name='option2'>
+                    <option>Seleccionar</option>
+                    <option value="Ascendente">Ascendente</option>
+                    <option value="Descendente">Descendente</option>
+                </select>
+                <Link to={`/${orderFilter.option1}`}>
+                    <button onClick={orderSubmit}>Buscar</button>
+                </Link>
+            </div>
 
             <h2>Buscar Por Contienente:</h2>
 

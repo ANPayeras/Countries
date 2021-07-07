@@ -12,7 +12,10 @@ function FiltradosContinente() {
             <ul>
                 {
                     countriesByContinent.map(e => (
-                        <li key={e.id}>{e.name}</li>
+                        <div>
+                            <li key={e.id}>{e.name}</li>
+                            <img src={e.flagimage} alt="" />
+                        </div>
                     ))
                 }
             </ul>

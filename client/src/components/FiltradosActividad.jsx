@@ -1,12 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Filtros from './Filtros';
 import UserContext from '../context/UserContext';
-import axios from 'axios';
 
 function FiltradosActividad() {
 
     const { activitiesByCountry } = useContext(UserContext);
-    console.log(activitiesByCountry)
+    // console.log(activitiesByCountry)
 
     let actividades = activitiesByCountry.map(e => {
         return e.name
@@ -15,35 +14,28 @@ function FiltradosActividad() {
     let resultActividades = [...actividadesFiltradas];
     // console.log(resultActividades)
 
-   
-
     let paises = activitiesByCountry.map(e => e.countries)
-    console.log(paises) // array con array de nombres
+    // console.log(paises) // array con array de paises
 
-    let a = paises.join(',')
-    console.log(a)
+    let nombresdePaises = [];
+    paises.map(e => nombresdePaises.push(e[0].name)) // unico array con todos los nombres
 
+    const paisesFiltrados = new Set(nombresdePaises);
+    let resultPaises = [...paisesFiltrados]; // array sin duplicados
 
-    let algo = [];
-    paises && paises.map(e => algo.push(e[0].name))
-
-    const paisesFiltrados = new Set(algo);
-    let resultPaises = [...paisesFiltrados];
-
-    console.log(resultPaises)
+    // console.log(resultPaises)
 
     return (
         <div>
             <Filtros />
             <ul>
-                <li>{resultActividades}</li>
+                <div>Actividad: {resultActividades}</div>
+                <p></p>
                 {
-                    resultPaises.map(e => (
-                        <li>{e}</li>
+                    resultPaises.map((e, i) => (
+                        <li key={i}>{e}</li>
                     ))
                 }
-
-
             </ul>
         </div>
     )
