@@ -8,6 +8,7 @@ function NavBar() {
         <div className='navbar'>
             <h2>NAV BAR</h2>
             <Link to='/home'>Home</Link>
+            <Link to='/postactivity'>Crear Actividad</Link>
         </div>
     )
 }
