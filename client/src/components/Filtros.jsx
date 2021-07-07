@@ -5,7 +5,7 @@ import './filtros.css'
 
 function Filtros() {
 
-    const { getSearchedCountry, getAllCountries, allCountries, getActivities, activities, getContinents, getActivitiesByCountry, order } = useContext(UserContext);
+    const { getSearchedCountry, searchedCountry, getAllCountries, allCountries, getActivities, activities, getContinents, getActivitiesByCountry, order } = useContext(UserContext);
     // console.log(activitiesByCountry)
 
     useEffect(() => {
@@ -61,14 +61,15 @@ function Filtros() {
     const [orderFilter, setOrderFilter] = useState({
         select: true
     })
-    console.log(orderFilter)
+    // console.log(orderFilter)
     const orderHandler = (e) => {
         setOrderFilter({
             ...orderFilter,
             [e.target.name]: e.target.value
         })
     }
-    const orderSubmit = (e) => {
+    const orderNow = (e) => {
+        console.log(e)
         e.preventDefault();
         const { option1, option2 } = orderFilter
         if (option1 && option2) {
@@ -80,9 +81,8 @@ function Filtros() {
 
         <div className="filtros">
 
-
             <h2>Ordenar por:</h2>
-            <div onChange={orderHandler}>
+            <form onChange={orderHandler} onClick={orderNow}>
                 <select name='option1'>
                     <option>Seleccionar</option>
                     <option value="Nombre">Nombre</option>
@@ -94,45 +94,50 @@ function Filtros() {
                     <option value="Descendente">Descendente</option>
                 </select>
                 <Link to={`/${orderFilter.option1}`}>
-                    <button onClick={orderSubmit}>Buscar</button>
+                    <button type='button' disabled={orderFilter.option1 && orderFilter.option2 ? false : true}
+
+                    >Buscar</button>
+                </Link>
+            </form>
+            <div>
+                <h2>Buscar Por Contienente:</h2>
+
+                <select onChange={handlerOptionContinent}>
+                    {
+                        resultContinentes.map(e => (
+                            <option value={e}>{e}</option>
+                        ))
+
+                    }
+                </select>
+                <Link to='/filtradoscontinente'>
+                    <button>Buscar</button>
+                </Link>
+            </div>
+            <div>
+                <h2>Buscar Por Actividad Turistica:</h2>
+
+                <select onChange={handlerOptionActivity} >
+                    <option></option>
+                    {
+                        resultActividades.map(e => (
+                            <option value={e}>{e}</option>
+                        ))
+
+                    }
+                </select>
+                <Link to='/filtradosactividad'>
+                    <button>Buscar</button>
                 </Link>
             </div>
 
-            <h2>Buscar Por Contienente:</h2>
-
-            <select onChange={handlerOptionContinent}>
-                {
-                    resultContinentes.map(e => (
-                        <option value={e}>{e}</option>
-                    ))
-
-                }
-            </select>
-            <Link to='/filtradoscontinente'>
-                <button>Buscar</button>
-            </Link>
-            <h2>Buscar Por Actividad Turistica:</h2>
-
-            <select onChange={handlerOptionActivity} >
-                <option></option>
-                {
-                    resultActividades.map(e => (
-                        <option value={e}>{e}</option>
-                    ))
-
-                }
-            </select>
-            <Link to='/filtradosactividad'>
-                <button>Buscar</button>
-            </Link>
-
             <form action="" onSubmit={handlerSubmit}>
-                <input type="text" placeholder='Buscar Pais' onChange={handlerChange} name='input' />
+                <input type="text" placeholder='Buscar Pais' onChange={handlerChange} name='inputBuscar' />
                 <Link to='/paisesbuscados'>
-                    <button>Buscar</button>
+                    <button disabled={!searchedCountry[0] ? true : false}>Buscar</button>
                 </Link>
             </form>
-        </div>
+        </div >
     )
 }
 

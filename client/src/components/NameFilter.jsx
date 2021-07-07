@@ -3,15 +3,13 @@ import Filtros from './Filtros';
 import UserContext from '../context/UserContext';
 
 function NameFilter() {
-    const { orderAsc, orderDesc } = useContext(UserContext);
+    const { nameOrder } = useContext(UserContext);
 
     return (
         <div>
             <Filtros />
             {
-                orderAsc ? orderAsc.map(e => (
-                    <div key={e.id}>{e.name}</div>
-                )) : orderDesc.map(e => (
+                nameOrder[0] && nameOrder.map(e => (
                     <div key={e.id}>{e.name}</div>
                 ))
             }
