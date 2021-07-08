@@ -1,5 +1,9 @@
 import React, { useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import UserContext from '../context/UserContext';
+import NavBar from './navbar';
+
+
 
 function DetallePais({ match }) {
 
@@ -11,8 +15,9 @@ function DetallePais({ match }) {
 
     return (
         <div>
+            <NavBar />
             Detalle Pais
-
+            <Link to='/paisesbuscados'>Volver</Link>
             <div key={countryById.id}>
                 <h1>{countryById.name}</h1>
                 <h1>{countryById.id}</h1>

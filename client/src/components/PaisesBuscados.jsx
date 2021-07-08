@@ -2,7 +2,9 @@ import React, { useContext } from 'react';
 import UserContext from '../context/UserContext';
 import { Link } from 'react-router-dom';
 
+// Components
 import Filtros from './Filtros';
+import NavBar from './navbar';
 
 function PaisesBuscados() {
 
@@ -10,6 +12,7 @@ function PaisesBuscados() {
 
     return (
         <div>
+            <NavBar />
             <Filtros />
             {
                 searchedCountry.map((e, i) => (

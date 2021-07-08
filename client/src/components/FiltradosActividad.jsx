@@ -2,6 +2,9 @@ import React, { useContext } from 'react';
 import Filtros from './Filtros';
 import UserContext from '../context/UserContext';
 
+// Components
+import NavBar from './navbar';
+
 function FiltradosActividad() {
 
     const { activitiesByCountry } = useContext(UserContext);
@@ -27,6 +30,7 @@ function FiltradosActividad() {
 
     return (
         <div>
+            <NavBar />
             <Filtros />
             <ul>
                 <div>Actividad: {resultActividades}</div>

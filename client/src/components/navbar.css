@@ -1,3 +1,18 @@
 .navbar {
     border-bottom: solid 5px black;
+    display: flex;
+    justify-content: space-around;
+    background-color: brown;
+}
+
+.linkNav {
+    border: solid 5px brown;
+    margin: 10px 0;
+    padding: 2px;
+}
+
+.linkNav:hover {
+    cursor: pointer;
+    border: solid 2px black;
+
 }

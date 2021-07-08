@@ -2,8 +2,11 @@ import axios from 'axios';
 import React, { useEffect, useState, useContext } from 'react';
 import UserContext from '../context/UserContext';
 
-// Filtros Bar
+import './Home.css'
+
+// Componens
 import Filtros from './Filtros';
+import NavBar from './navbar';
 
 function Home() {
 
@@ -68,6 +71,7 @@ function Home() {
 
     return (
         <div>
+            <NavBar />
             <Filtros />
             <h1>HOME</h1>
             <button onClick={antPage}>Anterior</button>

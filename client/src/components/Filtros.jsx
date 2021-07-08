@@ -19,7 +19,6 @@ function Filtros() {
 
     const handlerChange = (e) => {
         let target = e.target.value
-        console.log(target)
         if (target) {
             // let buscando = allCountries.filter(e => e.name === target)
             // console.log(buscando)
@@ -131,7 +130,7 @@ function Filtros() {
                 </Link>
             </div>
 
-            <form action="" onSubmit={handlerSubmit}>
+            <form onSubmit={handlerSubmit}>
                 <input type="text" placeholder='Buscar Pais' onChange={handlerChange} name='inputBuscar' />
                 <Link to='/paisesbuscados'>
                     <button disabled={!searchedCountry[0] ? true : false}>Buscar</button>
