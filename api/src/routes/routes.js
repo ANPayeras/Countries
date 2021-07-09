@@ -1,44 +1,63 @@
-
 const axios = require('axios');
+const { Op } = require("sequelize");
 const { Country, Activity } = require('../db');
+
+const { paginate } = require('./pagination');
 
 const allCountries = async (_req, _res, next) => {
     try {
         const response = await axios.get('https://restcountries.eu/rest/v2/all')
         const paises = response.data;
 
-        for (let i = 0; i < paises.length; i++) {
-
+        paises.map(e => {
             Country.create({
-                id: paises[i].alpha3Code,
-                name: paises[i].name,
-                flagimage: paises[i].flag,
-                continente: paises[i].region,
-                capital: paises[i].capital,
-                subRegion: paises[i].subregion,
-                area: paises[i].area,
-                population: paises[i].population
+                id: e.alpha3Code,
+                name: e.name,
+                flagimage: e.flag,
+                continente: e.region,
+                capital: e.capital,
+                subRegion: e.subregion,
+                area: e.area,
+                population: e.population
             })
-        }
+        })
+
     } catch (error) {
         next(error);
     }
 }
 
+
+
 const countries = async (req, res, next) => {
-    if (req.query.name) {
+    const { name, page } = req.query
+
+    if (name && !page) {
         try {
-            const country = await Country.findAll({ where: { name: req.query.name } })
+            const country = await Country.findAll({
+                where: {
+                    name: {
+                        [Op.iLike]: `%${name}%`
+                    }
+                }
+            })
             if (country[0]) {
                 res.json(country);
             } else {
-                res.json('El pais no existe')
+                res.json([{ msg: 'El Pais no Existe' }])
             }
         } catch (error) {
             next(error)
         }
+    } else if (page) {
+        /* Country.findAndCountAll({ limit: 10, offset: page })
+            .then(r => res.json(r))
+            .catch(error => next(error)) */
+        paginate(page, 10)
+            .then(r => res.json(r))
+            .catch(error => next(error))
     } else {
-        Country.findAll({ limit: 10 })
+        Country.findAll()
             .then(r => res.json(r))
             .catch(error => next(error))
     }
@@ -67,6 +86,15 @@ const countriesById = (req, res, next) => {
         .catch(error => next(error))
 }
 
+const getActivities = (_req, res, next) => {
+    Activity.findAll({
+        attributes: ['id', 'name', 'dificulty', 'duration', 'season'],
+        include: [Country]
+    })
+        .then(respuesta => { res.json({ respuesta }) })
+        .catch(error => next(error))
+}
+
 const createActivity = async (req, res, next) => {
     const { name, dificulty, duration, season, countryId } = req.body
     try {
@@ -80,6 +108,7 @@ const createActivity = async (req, res, next) => {
 
         await activity.setCountries(idPaises); // seteamos la relacion de la actividad recien creada con los paises pasados por body
 
+
         res.json({ msg: 'Actividad Agregada' })
     } catch (error) {
         next(error)
@@ -90,5 +119,6 @@ module.exports = {
     allCountries,
     countries,
     countriesById,
-    createActivity
+    createActivity,
+    getActivities
 }
