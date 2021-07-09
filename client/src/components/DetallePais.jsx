@@ -1,16 +1,24 @@
-import React, { useContext, useEffect } from 'react';
+import React, { _useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import UserContext from '../context/UserContext';
+// import UserContext from '../context/UserContext';
 import NavBar from './navbar';
 
+// Redux
+import { useSelector, useDispatch } from 'react-redux';
+import { getCountryById } from '../Redux/actions/actions';
 
 
 function DetallePais({ match }) {
 
-    const { countryById, getCountryById } = useContext(UserContext);
+    // const { countryById, getCountryById } = useContext(UserContext);
+
+    const countryById = useSelector(state => state.countryById)
+    const dispatch = useDispatch()
+
+    const { id, name, continente, capital, subRegion, population, area, flagimage, activities } = countryById
 
     useEffect(() => {
-        getCountryById(match.params.id)
+        dispatch(getCountryById(match.params.id));
     }, [])
 
     return (
@@ -18,18 +26,18 @@ function DetallePais({ match }) {
             <NavBar />
             Detalle Pais
             <Link to='/paisesbuscados'>Volver</Link>
-            <div key={countryById.id}>
-                <h1>{countryById.name}</h1>
-                <h1>{countryById.id}</h1>
-                <h1>{countryById.continente}</h1>
-                <h1>{countryById.capital}</h1>
-                <h1>{countryById.subRegion}</h1>
-                <h1>Poblacion: {countryById.population}</h1>
-                <h1>Area: {countryById.area}</h1>
-                <img src={countryById.flagimage} alt="" />
+            <div key={id}>
+                <h1>{name}</h1>
+                <h1>{id}</h1>
+                <h1>{continente}</h1>
+                <h1>{capital}</h1>
+                <h1>{subRegion}</h1>
+                <h1>Poblacion: {population}</h1>
+                <h1>Area: {area}</h1>
+                <img src={flagimage} alt="" />
                 Actividades:
-                {countryById.activities ?
-                    countryById.activities.map(e => (
+                {activities ?
+                    activities.map(e => (
                         <div key={e.id}>
                             <h3>{e.name}</h3>
                             <h3>{e.dificulty}</h3>

@@ -1,15 +1,20 @@
 import axios from 'axios';
-import React, { useState, useContext } from 'react';
-import UserContext from '../context/UserContext';
+import React, { useState } from 'react';
 
 // Components
 import NavBarActivity from './NavBarActivity';
 import { Link } from 'react-router-dom';
 
+// Redux
+import { useSelector, useDispatch } from 'react-redux';
+// Actions
+import { getSearchedCountry } from '../Redux/actions/actions'
 
 function PostActivity() {
 
-    const { allCountries, searchedCountry, getSearchedCountry } = useContext(UserContext);
+    const allCountries = useSelector(state => state.allCountries)
+    const searchedCountry = useSelector(state => state.searchedCountry)
+    const dispatch = useDispatch()
 
     const [activity, setActivity] = useState({
         name: '',
@@ -30,7 +35,6 @@ function PostActivity() {
     const handlerChange = (e) => {
         let target = e.target.value;
         if (e.target.name === 'dificulty') {
-
             validate(target);
         }
         if (e.target.name === 'id') {
@@ -84,7 +88,7 @@ function PostActivity() {
     const searchBar = (e) => {
         let target = e.target.value
         if (target) {
-            getSearchedCountry(target)
+            dispatch(getSearchedCountry(target))
             setshowCountries({
                 ...showCountries,
                 input: target
@@ -100,7 +104,6 @@ function PostActivity() {
             show: !showCountries.show,
             input: ''
         });
-
     }
 
     return (
@@ -123,11 +126,7 @@ function PostActivity() {
                     <option value="Invierno">Invierno</option>
                 </select>
 
-
                 <input type="text" placeholder='Buscar Pais' onChange={searchBar} value={showCountries.input} />
-
-
-
 
                 {
                     searchedCountry[0] && !searchedCountry[0].msg ? searchedCountry.map(e => (

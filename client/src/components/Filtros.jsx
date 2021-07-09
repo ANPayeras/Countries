@@ -1,17 +1,28 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, _useContext } from 'react';
 import { Link } from 'react-router-dom';
-import UserContext from '../context/UserContext';
+// import UserContext from '../context/UserContext';
 import './filtros.css'
 
-function Filtros() {
+// Redux
+import { useSelector, useDispatch } from 'react-redux';
+// Actions
+import { getAllCountries, getActivities, getSearchedCountry, getContinents, getActivitiesByCountry, order } from '../Redux/actions/actions';
 
-    const { getSearchedCountry, searchedCountry, getAllCountries, allCountries, getActivities, activities, getContinents, getActivitiesByCountry, order } = useContext(UserContext);
+function Filtros({ showAll, showCountrySearched }) {
+
+    // const { getSearchedCountry, searchedCountry, getAllCountries, allCountries, getActivities, activities, getContinents, getActivitiesByCountry, order } = useContext(UserContext);
     // console.log(activitiesByCountry)
+    const searchedCountry = useSelector(state => state.searchedCountry)
+    const allCountries = useSelector(state => state.allCountries)
+    const activities = useSelector(state => state.activities)
+    const dispatch = useDispatch()
+    console.log(searchedCountry)
 
     useEffect(() => {
-        getAllCountries();
-        getActivities();
-    }, [])
+        dispatch(getAllCountries());
+        dispatch(getActivities());
+
+    }, [dispatch])
 
     const handlerSubmit = (e) => {
         e.preventDefault();
@@ -19,28 +30,20 @@ function Filtros() {
 
     const handlerChange = (e) => {
         let target = e.target.value
-        if (target) {
-            // let buscando = allCountries.filter(e => e.name === target)
-            // console.log(buscando)
-            getSearchedCountry(target)
-            /*   if (buscando[0]) {
-                  getSearchedCountry(buscando[0].name)
-              } else {
-                  console.log('No hay pais')
-              } */
-        } else {
-            return null
-        }
+        let arr = [];
+        arr.push(target)
+        showCountrySearched(arr)
+        dispatch(getSearchedCountry(target))
     }
 
     const handlerOptionContinent = (e) => {
         let target = e.target.value;
-        getContinents(target);
+        dispatch(getContinents(target, allCountries));
     }
 
     const handlerOptionActivity = (e) => {
         let target = e.target.value;
-        getActivitiesByCountry(target)
+        dispatch(getActivitiesByCountry(target, activities));
     }
     // Sacando los repetidos
     // Continente
@@ -66,14 +69,23 @@ function Filtros() {
             ...orderFilter,
             [e.target.name]: e.target.value
         })
+        /*   const { option1, option2 } = orderFilter
+          if (option1 && option2) {
+              dispatch(order(option1, option2, allCountries))
+          } */
     }
     const orderNow = (e) => {
-        console.log(e)
         e.preventDefault();
         const { option1, option2 } = orderFilter
         if (option1 && option2) {
-            order(option1, option2)
+            dispatch(order(option1, option2, allCountries))
         }
+    }
+
+    const activateOrder = () => {
+        setOrderFilter({
+            select: !orderFilter.select
+        })
     }
     //---
     return (
@@ -81,25 +93,24 @@ function Filtros() {
         <div className="filtros">
 
             <h2>Ordenar por:</h2>
-            <form onChange={orderHandler} onClick={orderNow}>
-                <select name='option1'>
+            <button onClick={activateOrder}>Buscar</button>
+            <form onChange={orderHandler} onClick={orderNow} hidden={orderFilter.select ? true : false}>
+                <select name='option1' >
                     <option>Seleccionar</option>
                     <option value="Nombre">Nombre</option>
                     <option value="Poblacion">Poblacion</option>
                 </select>
-                <select hidden={orderFilter.option1 ? false : true} name='option2'>
+                <select hidden={orderFilter.option1 ? false : true} name='option2' >
                     <option>Seleccionar</option>
                     <option value="Ascendente">Ascendente</option>
                     <option value="Descendente">Descendente</option>
                 </select>
-                <Link to={`/${orderFilter.option1}`}>
-                    <button type='button' disabled={orderFilter.option1 && orderFilter.option2 ? false : true}
-
-                    >Buscar</button>
+                <Link to='/OrderFilter'>
+                    <button type='button'>Buscar</button>
                 </Link>
             </form>
-            <div>
-                <h2>Buscar Por Contienente:</h2>
+            <form>
+                <h2 onClick={showAll}>Buscar Por Contienente:</h2>
 
                 <select onChange={handlerOptionContinent}>
                     {
@@ -112,16 +123,15 @@ function Filtros() {
                 <Link to='/filtradoscontinente'>
                     <button>Buscar</button>
                 </Link>
-            </div>
+            </form>
             <div>
                 <h2>Buscar Por Actividad Turistica:</h2>
 
                 <select onChange={handlerOptionActivity} >
-                    <option></option>
                     {
-                        resultActividades.map(e => (
+                        resultActividades[0] ? resultActividades.map(e => (
                             <option value={e}>{e}</option>
-                        ))
+                        )) : <option> No Hay Actividades </option>
 
                     }
                 </select>
@@ -131,7 +141,7 @@ function Filtros() {
             </div>
 
             <form onSubmit={handlerSubmit}>
-                <input type="text" placeholder='Buscar Pais' onChange={handlerChange} name='inputBuscar' />
+                <input type="text" placeholder='Buscar Pais' onChange={handlerChange}/>
                 <Link to='/paisesbuscados'>
                     <button disabled={!searchedCountry[0] ? true : false}>Buscar</button>
                 </Link>

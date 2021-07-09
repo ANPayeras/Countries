@@ -1,93 +1,123 @@
 import axios from 'axios';
-import React, { useEffect, useState, useContext } from 'react';
-import UserContext from '../context/UserContext';
+import React, { useEffect, useState } from 'react';
+// import UserContext from '../context/UserContext';
 
 import './Home.css'
 
-// Componens
+// Redux 
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllCountries } from '../Redux/actions/actions';
+
+// Components
 import Filtros from './Filtros';
 import NavBar from './navbar';
+// import OrderFilter from './OrderFilter';
+import FiltradosContinente from './FiltradosContinente';
+import PaisesBuscados from './PaisesBuscados';
 
 function Home() {
 
-    const { getAllCountries } = useContext(UserContext);
+    const dispatch = useDispatch()
+    const allCountries = useSelector(state => state.allCountries)
 
-    const [paises, setPaises] = useState([]);
+    const api = 'http://localhost:3001/countries?page=';
+    const [showComponents, setShowComponents] = useState(false)
+    const [showContinents, setShowContinets] = useState(false)
+    const [showCountry, setShowCountry] = useState(false)
     const [page, setPage] = useState({
         actualpage: 0,
         nextPage: 0,
         prevPage: 0,
-        totalPages: 0
+        totalPages: 0,
+        limit: 0
     })
+    const { actualpage, nextPage, totalPages, limit } = page;
 
     useEffect(() => {
         countriesByPage();
-        getAllCountries();
+        dispatch(getAllCountries());
     }, [])
 
     const countriesByPage = async () => {
-        const listadoDePaises = await axios.get(`http://localhost:3001/countries?page=0`);
-        const datos = listadoDePaises.data.data;
-        const totalPages = Math.ceil(listadoDePaises.data.total / listadoDePaises.data.data.length)
-        setPaises(datos);
+        const listadoDePaises = await axios.get(`${api}0`);
+        const totalPages = Math.ceil(listadoDePaises.data.total / listadoDePaises.data.limit);
         setPage({
             ...page,
-            actualpage: listadoDePaises.data.currentPage + 1,
+            actualpage: listadoDePaises.data.currentPage,
             nextPage: listadoDePaises.data.nextPage,
             prevPage: listadoDePaises.data.previousPage,
-            totalPages: totalPages
+            totalPages: totalPages,
+            limit: listadoDePaises.data.limit
         })
     }
 
-    const sigPage = async () => {
-        let { nextPage, totalPages } = page;
-        if (nextPage >= totalPages) return null
+    const changePage = (e) => {
+        let { nextPage, totalPages, prevPage } = page;
+        if (e.target.name === 'siguiente') {
+            if (nextPage >= totalPages) return null
+            getPages(nextPage)
+        } else {
+            if (prevPage < 0) return null;
+            getPages(prevPage)
+        }
+    }
 
-        const listadoDePaises = await axios.get(`http://localhost:3001/countries?page=${nextPage}`);
-        const datos = listadoDePaises.data.data;
-        setPaises(datos);
+    const getPages = async (pages) => {
+        const listadoDePaises = await axios.get(`${api}${pages}`);
         setPage({
             ...page,
-            actualpage: listadoDePaises.data.currentPage + 1,
+            actualpage: listadoDePaises.data.currentPage,
             nextPage: listadoDePaises.data.nextPage,
             prevPage: listadoDePaises.data.previousPage
         })
     }
 
-    const antPage = async (e) => {
-        let { prevPage } = page;
-        if (prevPage < 0) return null;
-
-        const listadoDePaises = await axios.get(`http://localhost:3001/countries?page=${prevPage}`);
-        const datos = listadoDePaises.data.data;
-        setPaises(datos);
-        setPage({
-            ...page,
-            actualpage: listadoDePaises.data.currentPage + 1,
-            nextPage: listadoDePaises.data.nextPage,
-            prevPage: listadoDePaises.data.previousPage
-        })
+    const showFil = () => {
+        setShowComponents(!showComponents)
     }
 
+    const showAll = () => {
+        setShowContinets(!showContinents)
+    }
+
+    const showCountrySearched = (l) => {
+        if (l[0] === '') {
+            setShowCountry(false)
+        } else {
+            setShowCountry(true)
+        }
+    }
+    console.log(showCountry)
     return (
         <div>
             <NavBar />
-            <Filtros />
-            <h1>HOME</h1>
-            <button onClick={antPage}>Anterior</button>
-            <button onClick={sigPage}>Siguiente</button>
-            <h3>{page.actualpage} - {page.totalPages} </h3>
-            <ul>
-                {
-                    paises.map(e => (
-                        <li key={e.id}>
-                            <h1>Nombre {e.name}</h1>
-                            <h2>Continente {e.continente}</h2>
-                            <img src={e.flagimage} alt="" />
-                        </li>
-                    ))
-                }
-            </ul>
+            <div className='filtros' hidden={showComponents ? true : false}><Filtros showAll={showAll} showCountrySearched={showCountrySearched} /></div>
+            <h1 >HOME</h1>
+            <button onClick={showFil}>Filtros</button>
+            <button disabled={!showContinents ? true : false} onClick={showAll}>Mostrar Todos</button>
+            <p></p>
+            {
+                showContinents ? <FiltradosContinente /> :
+
+                    showCountry ? <PaisesBuscados /> :
+                        <div>
+                            <button name='anterior' onClick={changePage}>Anterior</button>
+                            <button name='siguiente' onClick={changePage}>Siguiente</button>
+                            <h3>{actualpage + 1} - {totalPages} </h3>
+                            <ul>
+                                {
+                                    allCountries ? allCountries.slice(actualpage * limit, nextPage * limit).map(e => (
+                                        <li key={e.id}>
+                                            <h1>Nombre {e.name}</h1>
+                                            <h2>Continente {e.continente}</h2>
+                                            <img src={e.flagimage} alt="" />
+                                        </li>
+                                    )) : <p>No hay paises</p>
+                                }
+                            </ul>
+                        </div>
+
+            }
         </div>
     )
 }

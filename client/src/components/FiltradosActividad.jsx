@@ -1,14 +1,17 @@
-import React, { useContext } from 'react';
+import React, { _useContext } from 'react';
 import Filtros from './Filtros';
-import UserContext from '../context/UserContext';
+// import UserContext from '../context/UserContext';
 
 // Components
 import NavBar from './navbar';
 
+// Redux
+import { useSelector } from 'react-redux';
+
 function FiltradosActividad() {
 
-    const { activitiesByCountry } = useContext(UserContext);
-    // console.log(activitiesByCountry)
+    // const { activitiesByCountry } = useContext(UserContext);
+    const activitiesByCountry = useSelector(state => state.activitiesByCountry)
 
     let actividades = activitiesByCountry.map(e => {
         return e.name

@@ -1,24 +1,24 @@
-import React, { useContext } from 'react';
-import Filtros from './Filtros';
-import UserContext from '../context/UserContext';
-
-// Components
-import NavBar from './navbar';
+import React from 'react';
+import { Link } from 'react-router-dom';
+// Redux
+import { useSelector } from 'react-redux';
 
 function FiltradosContinente() {
 
-    const { countriesByContinent } = useContext(UserContext);
-
+    const countriesByContinent = useSelector(state => state.countriesByContinent)
+ 
     return (
         <div>
-            <NavBar />
-            <Filtros />
             <ul>
                 {
-                    countriesByContinent.map((e, i) => (
+                    countriesByContinent.map(e => (
                         <div>
-                            <li key={i}>{e.name}</li>
-                            <img src={e.flagimage} alt="" />
+                            <li key={e.id}>
+                                <Link to={`/detallepais/${e.id}`}>
+                                    {e.name}
+                                </Link>
+                            </li>
+                            <img src={e.flagimage} />
                         </div>
                     ))
                 }

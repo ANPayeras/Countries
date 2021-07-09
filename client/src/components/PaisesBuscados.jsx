@@ -1,19 +1,15 @@
-import React, { useContext } from 'react';
-import UserContext from '../context/UserContext';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-// Components
-import Filtros from './Filtros';
-import NavBar from './navbar';
+// Redux
+import { useSelector } from 'react-redux';
 
 function PaisesBuscados() {
 
-    const { searchedCountry } = useContext(UserContext);
+    const searchedCountry = useSelector(state => state.searchedCountry)
 
     return (
         <div>
-            <NavBar />
-            <Filtros />
             {
                 searchedCountry.map((e, i) => (
                     <div key={i}>
