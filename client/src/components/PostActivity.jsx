@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Components
 import NavBarActivity from './NavBarActivity';
@@ -8,13 +8,12 @@ import { Link } from 'react-router-dom';
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 // Actions
-import { getSearchedCountry } from '../Redux/actions/actions'
+import { getAllCountries } from '../Redux/actions/actions';
 
 function PostActivity() {
+    const dispatch = useDispatch()
 
     const allCountries = useSelector(state => state.allCountries)
-    const searchedCountry = useSelector(state => state.searchedCountry)
-    const dispatch = useDispatch()
 
     const [activity, setActivity] = useState({
         name: '',
@@ -22,9 +21,14 @@ function PostActivity() {
         duration: '',
         season: '',
         countryId: [],
-        msg: ''
+        msg: '',
+        chek: null
     })
-    const { name, dificulty, duration, season } = activity;
+    console.log(activity.chek)
+
+    useEffect(() => {
+        dispatch(getAllCountries())
+    }, [])
 
     const [errors, setErrors] = useState('')
     const [showCountries, setshowCountries] = useState({
@@ -60,10 +64,12 @@ function PostActivity() {
             duration: '',
             season: '',
             countryId: [],
-            msg
+            msg,
+            chek: false
         });
 
     }
+    const { name, dificulty, duration, season } = activity;
 
     const sendActivity = async (activity) => {
         const { name, dificulty, duration, season, countryId } = activity;
@@ -85,37 +91,22 @@ function PostActivity() {
         }
     }
 
-    const searchBar = (e) => {
-        let target = e.target.value
-        if (target) {
-            dispatch(getSearchedCountry(target))
-            setshowCountries({
-                ...showCountries,
-                input: target
-            })
-        } else {
-            return null
-        }
-    }
-
-    const showAll = () => {
-        setshowCountries({
-            ...showCountries,
-            show: !showCountries.show,
-            input: ''
-        });
+    const changeCheck = () => {
+        setActivity({
+            ...activity,
+            chek: null
+        })
     }
 
     return (
 
         <div>
             <NavBarActivity />
-            <button onClick={showAll} disabled={showCountries.input ? false : true}>Mostar Todos</button>
 
             <form action="" onChange={handlerChange} onSubmit={handlerSubmit}>
                 <input type="text" name='name' placeholder='Nombre' value={name} />
                 <input type="text" name='dificulty' placeholder='Dificultad' value={dificulty} />
-                {errors && <h3>{errors}</h3>}
+                {errors && <p>{errors}</p>}
                 <input type="text" name='duration' placeholder='Duracion' value={duration} />
                 <h3>Temporada:</h3>
                 <select name="season" value={season}>
@@ -126,21 +117,14 @@ function PostActivity() {
                     <option value="Invierno">Invierno</option>
                 </select>
 
-                <input type="text" placeholder='Buscar Pais' onChange={searchBar} value={showCountries.input} />
-
                 {
-                    searchedCountry[0] && !searchedCountry[0].msg ? searchedCountry.map(e => (
+
+                    allCountries.map(e => (
                         <div key={e.id}>
-                            <input type="checkbox" name='id' value={e.id} />
-                            <Link to={`/detallepais/${e.id}`}>{e.name}</Link>
+                            <input type="checkbox" name='id' value={e.id} checked={activity.chek} onFocus={changeCheck} />
+                            <text>{e.name}</text>
                         </div>
-                    )) : searchedCountry[0] && searchedCountry[0].msg && showCountries.show ? <h1>{searchedCountry[0].msg}</h1> :
-                        allCountries.map(e => (
-                            <div key={e.id}>
-                                <input type="checkbox" name='id' value={e.id} />
-                                <Link to={`/detallepais/${e.id}`}>{e.name}</Link>
-                            </div>
-                        ))
+                    ))
 
                 }
                 <input type="submit" />

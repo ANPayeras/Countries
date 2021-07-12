@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 function PaisesBuscados() {
 
     const searchedCountry = useSelector(state => state.searchedCountry)
-
+    console.log(searchedCountry)
     return (
         <div>
             {

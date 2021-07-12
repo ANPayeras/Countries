@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Components
 import Filtros from './Filtros';
@@ -9,13 +9,20 @@ import { useSelector } from 'react-redux';
 
 function OrderFilter() {
 
-    // const nameOrder = useSelector(state => state.nameOrder);
     const orderFilter = useSelector(state => state.orderFilter);
-    // console.log(orderFilter)
+
+    console.log('Order Filter', orderFilter)
+
+    const [showComponents, setShowComponents] = useState(true)
+    const showFilters = () => {
+        setShowComponents(!showComponents)
+    }
+
     return (
         <div>
-            <NavBar />
-            <Filtros />
+            {/* <NavBar showFilters={showFilters} />
+            <div className='filtros' hidden={!showComponents ? true : false}><Filtros /></div> */}
+
             {
                 orderFilter[0] && orderFilter.map(e => (
                     <div key={e.id}>
@@ -24,7 +31,6 @@ function OrderFilter() {
                         {e.population}
                     </div>
                 ))
-
             }
         </div>
     )

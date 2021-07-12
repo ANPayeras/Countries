@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 // import UserContext from '../context/UserContext';
+import { WiAlien } from "react-icons/wi";
+
 
 import './Home.css'
 
@@ -11,7 +13,10 @@ import { getAllCountries } from '../Redux/actions/actions';
 // Components
 import Filtros from './Filtros';
 import NavBar from './navbar';
-// import OrderFilter from './OrderFilter';
+import SearchBar from './SearchBar';
+
+
+import OrderFilter from './OrderFilter';
 import FiltradosContinente from './FiltradosContinente';
 import PaisesBuscados from './PaisesBuscados';
 
@@ -22,16 +27,15 @@ function Home() {
 
     const api = 'http://localhost:3001/countries?page=';
     const [showComponents, setShowComponents] = useState(false)
-    const [showContinents, setShowContinets] = useState(false)
     const [showCountry, setShowCountry] = useState(false)
     const [page, setPage] = useState({
-        actualpage: 0,
+        currentPage: 0,
         nextPage: 0,
         prevPage: 0,
         totalPages: 0,
         limit: 0
     })
-    const { actualpage, nextPage, totalPages, limit } = page;
+    const { currentPage, nextPage, totalPages, limit } = page;
 
     useEffect(() => {
         countriesByPage();
@@ -43,7 +47,7 @@ function Home() {
         const totalPages = Math.ceil(listadoDePaises.data.total / listadoDePaises.data.limit);
         setPage({
             ...page,
-            actualpage: listadoDePaises.data.currentPage,
+            currentPage: listadoDePaises.data.currentPage,
             nextPage: listadoDePaises.data.nextPage,
             prevPage: listadoDePaises.data.previousPage,
             totalPages: totalPages,
@@ -66,56 +70,59 @@ function Home() {
         const listadoDePaises = await axios.get(`${api}${pages}`);
         setPage({
             ...page,
-            actualpage: listadoDePaises.data.currentPage,
+            currentPage: listadoDePaises.data.currentPage,
             nextPage: listadoDePaises.data.nextPage,
             prevPage: listadoDePaises.data.previousPage
         })
     }
 
-    const showFil = () => {
+    const showFilters = () => {
         setShowComponents(!showComponents)
     }
 
     const showAll = () => {
-        setShowContinets(!showContinents)
+        setShowCountry(false)
+        setShowOrder(false)
+        setShowContinent(false)
     }
 
-    const showCountrySearched = (l) => {
-        if (l[0] === '') {
-            setShowCountry(false)
-        } else {
-            setShowCountry(true)
-        }
-    }
-    console.log(showCountry)
+
+
+    const [showOrder, setShowOrder] = useState(false)
+    const [showByContinent, setShowContinent] = useState(false)
+    console.log(showByContinent)
+
     return (
         <div>
-            <NavBar />
-            <div className='filtros' hidden={showComponents ? true : false}><Filtros showAll={showAll} showCountrySearched={showCountrySearched} /></div>
-            <h1 >HOME</h1>
-            <button onClick={showFil}>Filtros</button>
-            <button disabled={!showContinents ? true : false} onClick={showAll}>Mostrar Todos</button>
+            <NavBar showFilters={showFilters} />
+            <div className='filtros' hidden={showComponents ? true : false}><Filtros showAll={showAll} setShowOrder={setShowOrder} setShowContinent={setShowContinent} /></div>
+            <h1 >HOME </h1>
+
+            <SearchBar showCountry={showCountry} setShowCountry={setShowCountry} setShowOrder={setShowOrder} setShowContinent={setShowContinent}/>
+
             <p></p>
             {
-                showContinents ? <FiltradosContinente /> :
+                showByContinent ? <FiltradosContinente /> :
 
-                    showCountry ? <PaisesBuscados /> :
-                        <div>
-                            <button name='anterior' onClick={changePage}>Anterior</button>
-                            <button name='siguiente' onClick={changePage}>Siguiente</button>
-                            <h3>{actualpage + 1} - {totalPages} </h3>
-                            <ul>
-                                {
-                                    allCountries ? allCountries.slice(actualpage * limit, nextPage * limit).map(e => (
-                                        <li key={e.id}>
-                                            <h1>Nombre {e.name}</h1>
-                                            <h2>Continente {e.continente}</h2>
-                                            <img src={e.flagimage} alt="" />
-                                        </li>
-                                    )) : <p>No hay paises</p>
-                                }
-                            </ul>
-                        </div>
+                    showOrder ? <OrderFilter /> :
+
+                        showCountry ? <PaisesBuscados /> :
+                            <div>
+                                <button name='anterior' onClick={changePage}>Anterior</button>
+                                <button name='siguiente' onClick={changePage}>Siguiente</button>
+                                <h3>{currentPage + 1} - {totalPages} </h3>
+                                <ul>
+                                    {
+                                        allCountries ? allCountries.slice(currentPage * limit, nextPage * limit).map(e => (
+                                            <li key={e.id}>
+                                                <h1>Nombre {e.name}</h1>
+                                                <h2>Continente {e.continente}</h2>
+                                                <img src={e.flagimage} alt="" />
+                                            </li>
+                                        )) : <p>No hay paises</p>
+                                    }
+                                </ul>
+                            </div>
 
             }
         </div>

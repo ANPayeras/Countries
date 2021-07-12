@@ -1,16 +1,15 @@
-import React, { _useContext } from 'react';
-import Filtros from './Filtros';
-// import UserContext from '../context/UserContext';
+import React from 'react';
+
 
 // Components
 import NavBar from './navbar';
+import Filtros from './Filtros';
 
 // Redux
 import { useSelector } from 'react-redux';
 
-function FiltradosActividad() {
+function ActivityFilter() {
 
-    // const { activitiesByCountry } = useContext(UserContext);
     const activitiesByCountry = useSelector(state => state.activitiesByCountry)
 
     let actividades = activitiesByCountry.map(e => {
@@ -24,12 +23,14 @@ function FiltradosActividad() {
     // console.log(paises) // array con array de paises
 
     let nombresdePaises = [];
-    paises.map(e => nombresdePaises.push(e[0].name)) // unico array con todos los nombres
+    paises.map(e => e.map(e => nombresdePaises.push(e.name)))  // unico array con todos los nombres
+
 
     const paisesFiltrados = new Set(nombresdePaises);
     let resultPaises = [...paisesFiltrados]; // array sin duplicados
 
-    // console.log(resultPaises)
+    // console.log(nombresdePaises)
+
 
     return (
         <div>
@@ -40,7 +41,9 @@ function FiltradosActividad() {
                 <p></p>
                 {
                     resultPaises.map((e, i) => (
-                        <li key={i}>{e}</li>
+                        <div>
+                            <li key={i}>{e}</li>
+                        </div>
                     ))
                 }
             </ul>
@@ -48,4 +51,4 @@ function FiltradosActividad() {
     )
 }
 
-export default FiltradosActividad;
+export default ActivityFilter;

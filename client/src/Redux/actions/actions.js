@@ -71,7 +71,7 @@ export const getActivitiesByCountry = (target, allCoun) => {
 export const order = (option, direcction, allCoun) => {
     return function (dispatch) {
         let allCountries2 = allCoun;
-        console.log(option, direcction)
+        // console.log(option, direcction)
         if (option === 'Nombre' && direcction === 'Ascendente') {
             const orderAsc = allCountries2.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
             console.log(orderAsc)
@@ -87,14 +87,14 @@ export const order = (option, direcction, allCoun) => {
             })
         } else if (option === 'Poblacion' && direcction === 'Ascendente') {
             const populationAsc = allCountries2.sort((a, b) => (a.population > b.population ? 1 : a.population < b.population ? -1 : 0))
-            console.log(populationAsc)
+            // console.log(populationAsc)
             dispatch({
                 type: 'ORDER',
                 payload: populationAsc
             })
         } else if (option === 'Poblacion' && direcction === 'Descendente') {
             const populationDesc = allCountries2.sort((a, b) => (a.population > b.population ? -1 : a.population < b.population ? 1 : 0))
-            console.log(populationDesc)
+            // console.log(populationDesc)
             dispatch({
                 type: 'ORDER',
                 payload: populationDesc
