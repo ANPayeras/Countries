@@ -7,28 +7,33 @@ import { useSelector } from 'react-redux';
 import Filtros from './Filtros';
 import NavBar from './navbar';
 
-function FiltradosContinente() {
+function FiltradosContinente({ page, setPage, continent }) {
 
     const countriesByContinent = useSelector(state => state.countriesByContinent)
     console.log(countriesByContinent)
-    const [showComponents, setShowComponents] = useState(false)
 
-    const showFilters = () => {
-        setShowComponents(!showComponents)
-    }
+    useEffect(() => {
+        const changePages = () => {
+            setPage({
+                ...page,
+                currentPage: 0,
+                nextPage: 1,
+                prevPage: 0,
+                totalPages: Math.ceil(countriesByContinent.length / 10)
+            })
+        }
+        changePages()
+    }, [continent.continent])
 
-    /*   useEffect(() => {
-          setShowComponents(true)
-      }, []) */
+
+
 
     return (
         <div>
-            {/* <NavBar showFilters={showFilters} />
-            <div className='filtros' hidden={!showComponents ? true : false}><Filtros /></div> */}
-
+            <h3>{page.currentPage + 1} - {page.totalPages} </h3>
             <ul>
                 {
-                    countriesByContinent.map(e => (
+                    countriesByContinent[0] && countriesByContinent.slice(page.currentPage * page.limit, page.nextPage * page.limit).map(e => (
                         <div>
                             <li key={e.id}>
                                 <Link to={`/detallepais/${e.id}`}>

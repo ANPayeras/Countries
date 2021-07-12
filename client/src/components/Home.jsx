@@ -36,7 +36,7 @@ function Home() {
         limit: 0
     })
     const { currentPage, nextPage, totalPages, limit } = page;
-
+    console.log(currentPage)
     useEffect(() => {
         countriesByPage();
         dispatch(getAllCountries());
@@ -68,6 +68,8 @@ function Home() {
 
     const getPages = async (pages) => {
         const listadoDePaises = await axios.get(`${api}${pages}`);
+        console.log(pages)
+        console.log(listadoDePaises.data.currentPage)
         setPage({
             ...page,
             currentPage: listadoDePaises.data.currentPage,
@@ -84,35 +86,51 @@ function Home() {
         setShowCountry(false)
         setShowOrder(false)
         setShowContinent(false)
+        setPage({
+            ...page,
+            totalPages: Math.ceil(allCountries.length / limit)
+        })
     }
 
 
 
     const [showOrder, setShowOrder] = useState(false)
     const [showByContinent, setShowContinent] = useState(false)
-    console.log(showByContinent)
+
+    const [continent, setContinent] = useState({
+        continent: ''
+    })
+
+    const a = (e) => {
+        setContinent({
+            ...continent,
+            continent: e
+        })
+    }
 
     return (
         <div>
             <NavBar showFilters={showFilters} />
-            <div className='filtros' hidden={showComponents ? true : false}><Filtros showAll={showAll} setShowOrder={setShowOrder} setShowContinent={setShowContinent} /></div>
+            <div className='filtros' hidden={showComponents ? true : false}><Filtros showAll={showAll} setShowOrder={setShowOrder} setShowContinent={setShowContinent} a={a} /></div>
             <h1 >HOME </h1>
 
-            <SearchBar showCountry={showCountry} setShowCountry={setShowCountry} setShowOrder={setShowOrder} setShowContinent={setShowContinent}/>
+            <SearchBar showCountry={showCountry} setShowCountry={setShowCountry} setShowOrder={setShowOrder} setShowContinent={setShowContinent} />
 
             <p></p>
-            {
-                showByContinent ? <FiltradosContinente /> :
+            <button name='anterior' onClick={changePage}>Anterior</button>
+            <button name='siguiente' onClick={changePage}>Siguiente</button>
 
-                    showOrder ? <OrderFilter /> :
+            {
+                showByContinent ? <FiltradosContinente page={page} setPage={setPage} continent={continent}/> :
+
+                    showOrder ? <OrderFilter page={page} /> :
 
                         showCountry ? <PaisesBuscados /> :
                             <div>
-                                <button name='anterior' onClick={changePage}>Anterior</button>
-                                <button name='siguiente' onClick={changePage}>Siguiente</button>
                                 <h3>{currentPage + 1} - {totalPages} </h3>
                                 <ul>
                                     {
+
                                         allCountries ? allCountries.slice(currentPage * limit, nextPage * limit).map(e => (
                                             <li key={e.id}>
                                                 <h1>Nombre {e.name}</h1>

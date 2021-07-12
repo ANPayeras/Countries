@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // Actions
 import { getAllCountries, getActivities, getContinents, getActivitiesByCountry, order } from '../Redux/actions/actions';
 
-function Filtros({ showAll, setShowOrder, setShowContinent }) {
+function Filtros({ showAll, setShowOrder, setShowContinent, a }) {
 
     const allCountries = useSelector(state => state.allCountries)
     const activities = useSelector(state => state.activities)
@@ -21,6 +21,7 @@ function Filtros({ showAll, setShowOrder, setShowContinent }) {
     const handlerOptionContinent = (e) => {
         let target = e.target.value;
         dispatch(getContinents(target, allCountries));
+        a(target)
     }
 
     const handlerOptionActivity = (e) => {
@@ -35,7 +36,7 @@ function Filtros({ showAll, setShowOrder, setShowContinent }) {
     const continentesFiltrados = new Set(continentes);
     let resultContinentes = [...continentesFiltrados];
 
-    console.log(resultContinentes)
+    // console.log(resultContinentes)
     // Actividad
     let actividades = activities.map(e => {
         return e.name
@@ -54,7 +55,7 @@ function Filtros({ showAll, setShowOrder, setShowContinent }) {
 
     useEffect(() => {
         const dispatchOrder = () => {
-            console.log(option1, option2)
+            // console.log(option1, option2)
             if (option1 && option2) {
                 dispatch(order(option1, option2, allCountries))
             }
@@ -71,7 +72,7 @@ function Filtros({ showAll, setShowOrder, setShowContinent }) {
 
     const orderNow = (e) => {
         e.preventDefault();
-        const { option1, option2 } = orderFilter
+        // const { option1, option2 } = orderFilter
         console.log(option1, option2)
         if (option1 && option2) {
             dispatch(order(option1, option2, allCountries))
