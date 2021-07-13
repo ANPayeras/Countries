@@ -2,17 +2,18 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 // Components
-import NavBarActivity from './NavBarActivity';
-import { Link } from 'react-router-dom';
+import NavBarActivity from '../NavBarActivity/NavBarActivity';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 // Actions
-import { getAllCountries } from '../Redux/actions/actions';
+import { getAllCountries } from 'C:/Users/Angel/Desktop/PI/PI-Countries/client/src/Redux/actions/actions.js';
+// Styles 
+import styles from './PostActivity.module.css';
 
 function PostActivity() {
-    const dispatch = useDispatch()
 
+    const dispatch = useDispatch()
     const allCountries = useSelector(state => state.allCountries)
 
     const [activity, setActivity] = useState({
@@ -24,18 +25,13 @@ function PostActivity() {
         msg: '',
         chek: null
     })
-    console.log(activity.chek)
 
     useEffect(() => {
         dispatch(getAllCountries())
     }, [])
 
     const [errors, setErrors] = useState('')
-    const [showCountries, setshowCountries] = useState({
-        show: false,
-        input: ''
-    })
-    console.log(showCountries)
+
     const handlerChange = (e) => {
         let target = e.target.value;
         if (e.target.name === 'dificulty') {
@@ -57,7 +53,7 @@ function PostActivity() {
     const handlerSubmit = async (e) => {
         e.preventDefault();
         const msg = await sendActivity(activity);
-        alert(msg);
+        if(msg) alert(msg);
         setActivity({
             name: '',
             dificulty: '',
@@ -67,12 +63,12 @@ function PostActivity() {
             msg,
             chek: false
         });
-
     }
     const { name, dificulty, duration, season } = activity;
-
+    console.log(activity)
     const sendActivity = async (activity) => {
         const { name, dificulty, duration, season, countryId } = activity;
+        if(!name || !dificulty || !duration || !season || !countryId) return alert('Todos los campos son obligatorios')
         const result = await axios.post('http://localhost:3001/activity', {
             name,
             dificulty,
@@ -103,31 +99,32 @@ function PostActivity() {
         <div>
             <NavBarActivity />
 
-            <form action="" onChange={handlerChange} onSubmit={handlerSubmit}>
-                <input type="text" name='name' placeholder='Nombre' value={name} />
-                <input type="text" name='dificulty' placeholder='Dificultad' value={dificulty} />
-                {errors && <p>{errors}</p>}
-                <input type="text" name='duration' placeholder='Duracion' value={duration} />
-                <h3>Temporada:</h3>
-                <select name="season" value={season}>
-                    <option ></option>
-                    <option value="Verano">Verano</option>
-                    <option value="Primavera">Primavera</option>
-                    <option value="Otoño">Otoño</option>
-                    <option value="Invierno">Invierno</option>
-                </select>
+            <form onChange={handlerChange} onSubmit={handlerSubmit} className={styles.container}>
+                <div className={styles.form}>
+                    <input className={styles.options} type="text" name='name' placeholder='Nombre' value={name} />
+                    <input className={styles.options} type="text" name='dificulty' placeholder='Dificultad' value={dificulty} />
+                    {/* {errors && alert(errors)} */}
+                    <input className={styles.options} type="text" name='duration' placeholder='Duracion' value={duration} />
+                    <select className={styles.options} name="season" value={season}>
+                        <option className={styles.options}>Temporada</option>
+                        <option className={styles.options} value="Verano">Verano</option>
+                        <option className={styles.options} value="Primavera">Primavera</option>
+                        <option className={styles.options} value="Otoño">Otoño</option>
+                        <option className={styles.options} value="Invierno">Invierno</option>
+                    </select>
 
-                {
-
-                    allCountries.map(e => (
-                        <div key={e.id}>
-                            <input type="checkbox" name='id' value={e.id} checked={activity.chek} onFocus={changeCheck} />
-                            <text>{e.name}</text>
-                        </div>
-                    ))
-
-                }
-                <input type="submit" />
+                    <input className={styles.submit}type="submit" />
+                </div>
+                <div className={styles.countries}>
+                    {
+                        allCountries.map(e => (
+                            <div key={e.id}>
+                                <input type="checkbox" name='id' value={e.id} checked={activity.chek} onFocus={changeCheck} />
+                                <text>{e.name}</text>
+                            </div>
+                        ))
+                    }
+                </div>
             </form>
         </div>
     )

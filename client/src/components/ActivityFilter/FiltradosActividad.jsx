@@ -1,10 +1,5 @@
 import React from 'react';
 
-
-// Components
-import NavBar from './navbar';
-import Filtros from './Filtros';
-
 // Redux
 import { useSelector } from 'react-redux';
 
@@ -17,7 +12,7 @@ function ActivityFilter() {
     })
     const actividadesFiltradas = new Set(actividades);
     let resultActividades = [...actividadesFiltradas];
-    // console.log(resultActividades)
+    console.log(resultActividades)
 
     let paises = activitiesByCountry.map(e => e.countries)
     // console.log(paises) // array con array de paises
@@ -29,16 +24,13 @@ function ActivityFilter() {
     const paisesFiltrados = new Set(nombresdePaises);
     let resultPaises = [...paisesFiltrados]; // array sin duplicados
 
-    // console.log(nombresdePaises)
-
+    // console.log(resultPaises)
 
     return (
         <div>
-            <NavBar />
-            <Filtros />
             <ul>
-                <div>Actividad: {resultActividades}</div>
-                <p></p>
+                <h1>Actividad Turistica: {resultActividades[0] ? resultActividades : 'No hay Actividades'}</h1>
+                <h2>{resultActividades[0] ? 'Paises donde se realizan:' : null}</h2>
                 {
                     resultPaises.map((e, i) => (
                         <div>

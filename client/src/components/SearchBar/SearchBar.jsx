@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { useDispatch } from 'react-redux';
-import { getSearchedCountry } from '../Redux/actions/actions';
+import { getSearchedCountry } from 'C:/Users/Angel/Desktop/PI/PI-Countries/client/src/Redux/actions/actions.js';
 
-function SearchBar({ setShowCountry, showCountry, setShowOrder, setShowContinent }) {
+function SearchBar({ setShowCountry, showCountry, setShowOrder, setShowContinent, searchWatcher }) {
     const dispatch = useDispatch()
 
     const handlerChange = (e) => {
@@ -12,6 +12,7 @@ function SearchBar({ setShowCountry, showCountry, setShowOrder, setShowContinent
         arr.push(target)
         showCountrySearched(arr)
         dispatch(getSearchedCountry(target))
+        searchWatcher(target)
         setShowOrder(false)
         setShowContinent(false)
     }

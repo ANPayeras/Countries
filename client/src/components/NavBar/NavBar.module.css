@@ -1,0 +1,42 @@
+.navbar {
+    border-bottom: solid 1px black;
+    display: flex;
+    justify-content: space-around;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.home {
+    margin: 10px 0;
+    padding: 5px 5px;
+    color: white;
+}
+
+.home:hover {
+    color: brown
+
+}
+
+.filters {
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    margin: 10px 0;
+    padding: 5px 5px;
+    color: white;
+}
+
+.filters:hover {
+    cursor: pointer;
+    border-bottom: solid 1px brown;
+}
+
+.linkNav {
+    margin: 10px 0;
+    padding: 5px 5px;
+    color: white;
+}
+
+.linkNav:hover {
+    cursor: pointer;
+    border-bottom: solid 1px brown;
+}
+
+

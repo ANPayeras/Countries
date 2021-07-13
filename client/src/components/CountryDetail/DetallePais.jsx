@@ -1,16 +1,13 @@
-import React, { _useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// import UserContext from '../context/UserContext';
-import NavBar from './navbar';
+import NavBar from '../NavBar/NavBar';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getCountryById } from '../Redux/actions/actions';
+import { getCountryById } from 'C:/Users/Angel/Desktop/PI/PI-Countries/client/src/Redux/actions/actions.js';
 
 
 function DetallePais({ match }) {
-
-    // const { countryById, getCountryById } = useContext(UserContext);
 
     const countryById = useSelector(state => state.countryById)
     const dispatch = useDispatch()

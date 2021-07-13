@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 // Redux
 import { useSelector } from 'react-redux';
 
-// Components
-import Filtros from './Filtros';
-import NavBar from './navbar';
-
-function FiltradosContinente({ page, setPage, continent }) {
+function FiltradosContinente({ page, setPage, watcher }) {
 
     const countriesByContinent = useSelector(state => state.countriesByContinent)
     console.log(countriesByContinent)
@@ -23,14 +19,13 @@ function FiltradosContinente({ page, setPage, continent }) {
             })
         }
         changePages()
-    }, [continent.continent])
+    }, [watcher.continent])
 
 
 
 
     return (
         <div>
-            <h3>{page.currentPage + 1} - {page.totalPages} </h3>
             <ul>
                 {
                     countriesByContinent[0] && countriesByContinent.slice(page.currentPage * page.limit, page.nextPage * page.limit).map(e => (

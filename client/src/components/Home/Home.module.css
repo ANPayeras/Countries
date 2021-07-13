@@ -1,0 +1,47 @@
+.container {
+    /* background-color: brown; */
+    color: white;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+}
+
+.country {
+    border: 2px solid black;
+    display: grid;
+    justify-content: center;
+    margin: 2px;
+    height: 180px;
+}
+
+.country img{
+    border: 2px solid black;
+    width: 100px;
+    height: auto;
+}
+
+.searchBarContainer {
+    display: flex;
+    justify-content: center;
+    padding-top: 20PX;
+    margin-bottom: 50px;
+}
+
+.pages {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);   
+    padding: 0px 500px;
+    text-align: center;
+    color: white;
+}
+
+.pages button {
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    border: none;
+    padding: 0;
+}
+
+.pages button:hover {
+    cursor: pointer;
+    color: brown;
+}
