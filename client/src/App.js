@@ -1,6 +1,6 @@
-import style from './App.module.css';
-
 import { Route } from 'react-router-dom';
+
+// Components
 import Home from './components/Home/Home';
 import PaisesBuscados from './components/SearchedCountry/PaisesBuscados';
 import FiltradosContinente from './components/ContinentFilter/FiltradosContinente';

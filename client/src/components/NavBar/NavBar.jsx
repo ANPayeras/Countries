@@ -10,7 +10,7 @@ function NavBar({ showFilters }) {
     return (
         <>
             <div className={styles.navbar}>
-                <Link className={styles.home} to='/home'> <GiWorld /> </Link>
+                <Link to='/home' className={styles.home}> <GiWorld /> </Link>
                 <button className={styles.filters} onClick={showFilters}>Filtros</button>
                 <Link className={styles.linkNav} to='/postactivity'>Crear Actividad Turistica</Link>
             </div>

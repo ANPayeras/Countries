@@ -9,7 +9,7 @@ import style from '../Home/Home.module.css';
 function OrderFilter({ page, setPage, watcher }) {
 
     const orderFilter = useSelector(state => state.orderFilter);
-    console.log('Order Filter', watcher.orders)
+    // console.log('Order Filter', watcher.orders)
 
     useEffect(() => {
         const changePages = () => {

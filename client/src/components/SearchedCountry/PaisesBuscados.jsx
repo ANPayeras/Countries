@@ -6,27 +6,9 @@ import { useSelector } from 'react-redux';
 // Styles
 import style from '../Home/Home.module.css';
 
-function PaisesBuscados({ page, setPage, watcher }) {
+function PaisesBuscados({ page }) {
 
     const searchedCountry = useSelector(state => state.searchedCountry)
-    console.log(searchedCountry.length / 10)
-    console.log(watcher.country)
-    console.log(searchedCountry)
-
-
-    useEffect(() => {
-        const changePages = () => {
-            setPage({
-                ...page,
-                currentPage: 0,
-                nextPage: 1,
-                prevPage: 0,
-                totalPages: Math.ceil(searchedCountry.length / 10)
-            })
-        }
-        changePages()
-    }, [watcher.country])
-
 
     return (
         <div className={style.container}>

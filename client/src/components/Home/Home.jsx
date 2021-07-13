@@ -26,12 +26,14 @@ function Home() {
     const dispatch = useDispatch()
     const allCountries = useSelector(state => state.allCountries)
     const searchedCountry = useSelector(state => state.searchedCountry)
-   
-
 
     const api = 'http://localhost:3001/countries?page=';
-    const [showComponents, setShowComponents] = useState(true)
-    const [showCountry, setShowCountry] = useState(false)
+
+    useEffect(() => {
+        countriesByPage();
+        dispatch(getAllCountries());
+    }, [])
+
     const [page, setPage] = useState({
         currentPage: 0,
         nextPage: 0,
@@ -40,13 +42,12 @@ function Home() {
         limit: 0
     })
     const { currentPage, nextPage, totalPages, limit } = page;
-    // console.log(page)
-    useEffect(() => {
-        countriesByPage();
-        dispatch(getAllCountries());
-    }, [])
+    console.log(page)
 
-
+    /*   useEffect(() => {
+          countriesByPage();
+          dispatch(getAllCountries());
+      }, []) */
 
     const countriesByPage = async () => {
         const listadoDePaises = await axios.get(`${api}0`);
@@ -63,6 +64,7 @@ function Home() {
 
     const changePage = (e) => {
         let { nextPage, totalPages, prevPage } = page;
+        // console.log(e.target.name)
         if (e.target.name === 'siguiente') {
             if (nextPage >= totalPages) return null
             getPages(nextPage)
@@ -82,6 +84,12 @@ function Home() {
         })
     }
 
+    const [showComponents, setShowComponents] = useState(true)
+    const [showCountry, setShowCountry] = useState(false)
+    const [showOrder, setShowOrder] = useState(false)
+    const [showByContinent, setShowContinent] = useState(false)
+    const [showActivityFilter, setShowActivityFilter] = useState(false)
+
     const showFilters = () => {
         setShowComponents(!showComponents)
     }
@@ -100,18 +108,11 @@ function Home() {
         })
     }
 
-
-
-    const [showOrder, setShowOrder] = useState(false)
-    const [showByContinent, setShowContinent] = useState(false)
-    const [showActivityFilter, setShowActivityFilter] = useState(false)
-
     const [watcher, setWatcher] = useState({
         continent: '',
-        orders: '',
-        country: ''
+        orders: ''
     })
-    console.log(watcher.country)
+    // console.log(watcher.country)
 
     const watcherFunction = (e) => {
         if (e === 'Nombre' || e === 'Poblacion' || e === 'Ascendente' || e === 'Descendente') {
@@ -127,13 +128,6 @@ function Home() {
         }
     }
 
-    const searchWatcher = (e) => {
-        setWatcher({
-            ...watcher,
-            country: e
-        })
-    }
-
     return (
         <div >
             <NavBar showFilters={showFilters} />
@@ -144,7 +138,9 @@ function Home() {
             {
                 showActivityFilter ? null :
                     <div className={style.searchBarContainer}>
-                        <SearchBar showCountry={showCountry} setShowCountry={setShowCountry} setShowOrder={setShowOrder} setShowContinent={setShowContinent} searchWatcher={searchWatcher} />
+                        <SearchBar showCountry={showCountry} setShowCountry={setShowCountry}
+                            setShowOrder={setShowOrder} setShowContinent={setShowContinent}
+                        />
                     </div>
             }
             {
@@ -154,7 +150,7 @@ function Home() {
 
                         showOrder ? <OrderFilter page={page} setPage={setPage} watcher={watcher} /> :
 
-                            showCountry ? <PaisesBuscados page={page} setPage={setPage} watcher={watcher} /> :
+                            showCountry ? <PaisesBuscados page={page} /> :
                                 <div className={style.container}>
                                     {
 
@@ -175,7 +171,7 @@ function Home() {
             {showActivityFilter /* || searchedCountry[0] && searchedCountry[0].msg */ ? null :
                 <div className={style.pages}>
                     <button name='anterior' onClick={changePage}><IoArrowBackOutline /></button>
-                    <h3>Pagina {currentPage + 1} de {totalPages}</h3>
+                    <h3>Pagina {currentPage + 1} de {showCountry ? Math.ceil(searchedCountry.length / limit) : totalPages}</h3>
                     <button name='siguiente' onClick={changePage}><IoArrowForwardOutline /></button>
                 </div>
             }

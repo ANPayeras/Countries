@@ -53,7 +53,7 @@ function PostActivity() {
     const handlerSubmit = async (e) => {
         e.preventDefault();
         const msg = await sendActivity(activity);
-        if(msg) alert(msg);
+        if (msg) alert(msg);
         setActivity({
             name: '',
             dificulty: '',
@@ -65,10 +65,11 @@ function PostActivity() {
         });
     }
     const { name, dificulty, duration, season } = activity;
-    console.log(activity)
+
     const sendActivity = async (activity) => {
         const { name, dificulty, duration, season, countryId } = activity;
-        if(!name || !dificulty || !duration || !season || !countryId) return alert('Todos los campos son obligatorios')
+        if (!name || !dificulty || !duration || !season || !countryId) return alert('Todos los campos son obligatorios')
+        if (errors) alert('La dificultad ' + errors.toLowerCase())
         const result = await axios.post('http://localhost:3001/activity', {
             name,
             dificulty,
@@ -80,8 +81,8 @@ function PostActivity() {
     }
 
     const validate = (e) => {
-        if (!/^[0-5]$/.test(e)) {
-            setErrors('Debe ser entre 1 y 5')
+        if (!/^[1-5]$/.test(e)) {
+            setErrors('Debe ser un valor entre 1 y 5')
         } else {
             setErrors('');
         }
@@ -101,19 +102,28 @@ function PostActivity() {
 
             <form onChange={handlerChange} onSubmit={handlerSubmit} className={styles.container}>
                 <div className={styles.form}>
-                    <input className={styles.options} type="text" name='name' placeholder='Nombre' value={name} />
-                    <input className={styles.options} type="text" name='dificulty' placeholder='Dificultad' value={dificulty} />
-                    {/* {errors && alert(errors)} */}
-                    <input className={styles.options} type="text" name='duration' placeholder='Duracion' value={duration} />
-                    <select className={styles.options} name="season" value={season}>
-                        <option className={styles.options}>Temporada</option>
-                        <option className={styles.options} value="Verano">Verano</option>
-                        <option className={styles.options} value="Primavera">Primavera</option>
-                        <option className={styles.options} value="Otoño">Otoño</option>
-                        <option className={styles.options} value="Invierno">Invierno</option>
-                    </select>
-
-                    <input className={styles.submit}type="submit" />
+                    <div className={styles.errors}>
+                        <input className={styles.options} type="text" name='name' placeholder='Nombre' value={name} />
+                    </div>
+                    <div className={styles.errors}>
+                        <input className={styles.options} type="text" name='dificulty' placeholder='Dificultad' value={dificulty} />
+                        {errors && <span>{errors}</span>}
+                    </div>
+                    <div className={styles.errors}>
+                        <input className={styles.options} type="text" name='duration' placeholder='Duracion' value={duration} />
+                    </div>
+                    <div className={styles.errors}>
+                        <select className={styles.options} name="season" value={season}>
+                            <option className={styles.options}>Temporada</option>
+                            <option className={styles.options} value="Verano">Verano</option>
+                            <option className={styles.options} value="Primavera">Primavera</option>
+                            <option className={styles.options} value="Otoño">Otoño</option>
+                            <option className={styles.options} value="Invierno">Invierno</option>
+                        </select>
+                    </div>
+                    <div className={styles.errors}>
+                        <input className={errors ? styles.submitDisabled : styles.submit} disabled={errors ? true : false} type="submit" />
+                    </div>
                 </div>
                 <div className={styles.countries}>
                     {

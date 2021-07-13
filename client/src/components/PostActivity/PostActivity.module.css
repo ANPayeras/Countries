@@ -31,7 +31,22 @@
     color: white;
 }
 
+.submitDisabled {
+    color: grey;
+}
+
 .submit:hover {
     cursor: pointer;
     border-bottom: 1px solid brown;
+}
+
+.errors {
+    display: flex;
+    flex-direction: column;
+}
+
+.errors span {
+    color: red;
+    width: 100%;
+    font-size: 15px;
 }

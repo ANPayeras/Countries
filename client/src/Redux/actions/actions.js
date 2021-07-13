@@ -19,14 +19,13 @@ export const getSearchedCountry = (country) => {
                     payload: res.data
                 })
             } else {
-                console.log('No hay Pais')
+                // console.log('No hay Pais')
             }
         } catch (error) {
             console.log(error)
         }
     }
 }
-
 
 export const getActivities = () => {
     return async function (dispatch) {

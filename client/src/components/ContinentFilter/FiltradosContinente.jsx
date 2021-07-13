@@ -9,7 +9,7 @@ import style from '../Home/Home.module.css';
 function FiltradosContinente({ page, setPage, watcher }) {
 
     const countriesByContinent = useSelector(state => state.countriesByContinent)
-    console.log(countriesByContinent)
+    // console.log(countriesByContinent)
 
     useEffect(() => {
         const changePages = () => {
@@ -23,9 +23,6 @@ function FiltradosContinente({ page, setPage, watcher }) {
         }
         changePages()
     }, [watcher.continent])
-
-
-
 
     return (
         <div className={style.container}>

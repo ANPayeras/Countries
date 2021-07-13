@@ -22,7 +22,7 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
 
     const handlerOptionContinent = (e) => {
         let target = e.target.value;
-        console.log(target)
+        // console.log(target)
         if (target !== 'Empty') {
             dispatch(getContinents(target, allCountries));
             watcherFunction(target)
