@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 // Redux
 import { useSelector } from 'react-redux';
+// Styles
+import style from '../Home/Home.module.css';
 
 function OrderFilter({ page, setPage, watcher }) {
 
@@ -22,14 +25,18 @@ function OrderFilter({ page, setPage, watcher }) {
     }, [watcher.orders])
 
     return (
-        <div>
+        <div className={style.container}>
             {
                 orderFilter[0] && orderFilter.slice(page.currentPage * page.limit, page.nextPage * page.limit).map(e => (
-                    <div key={e.id}>
-                        <h1>Nombre: {e.name}</h1>
-                        <h2>Continente: {e.continente}</h2>
-                        <img src={e.flagimage} alt="" />
-                    </div>
+                    <Link to={`/detallepais/${e.id}`}>
+                        <div key={e.id} className={style.country}>
+                            <div >
+                                <h3>{e.name}</h3>
+                                <h3>{e.continente}</h3>
+                            </div>
+                            <img className={style.flag} src={e.flagimage} alt="..." />
+                        </div>
+                    </Link>
                 ))
             }
         </div>

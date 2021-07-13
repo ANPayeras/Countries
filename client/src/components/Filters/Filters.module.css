@@ -9,15 +9,13 @@
 .showAllButton {
     background-color: rgba(0, 0, 0, 0);
     color: white;
-    border: 1px brown solid;
+    border: none;
 }
 
 .showAllButton:hover {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0);
     cursor: pointer;
-    color: brown;
-    border: 1.5px brown solid;
-
+    border-bottom: 1px brown solid;
 }
 
 .filterButtons {

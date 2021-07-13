@@ -3,12 +3,16 @@ import { Link } from 'react-router-dom';
 
 // Redux
 import { useSelector } from 'react-redux';
+// Styles
+import style from '../Home/Home.module.css';
 
 function PaisesBuscados({ page, setPage, watcher }) {
 
     const searchedCountry = useSelector(state => state.searchedCountry)
     console.log(searchedCountry.length / 10)
     console.log(watcher.country)
+    console.log(searchedCountry)
+
 
     useEffect(() => {
         const changePages = () => {
@@ -25,17 +29,21 @@ function PaisesBuscados({ page, setPage, watcher }) {
 
 
     return (
-        <div>
+        <div className={style.container}>
             {
-                searchedCountry[0] && searchedCountry.slice(page.currentPage * page.limit, page.nextPage * page.limit).map((e, i) => (
-                    <div key={i}>
+                searchedCountry[0] && searchedCountry[0].msg ? searchedCountry.map(e => (<span className={style.msg}>{e.msg}</span>))
+                    : searchedCountry.slice(page.currentPage * page.limit, page.nextPage * page.limit).map((e, i) => (
                         <Link to={`/detallepais/${e.id}`}>
-                            <h1>Nombre: {e.name}</h1>
+                            <div key={e.id} className={style.country}>
+                                <div>
+                                    <h1>{e.msg}</h1>
+                                    <h3>{e.name}</h3>
+                                    <h3>{e.continente}</h3>
+                                </div>
+                                <img className={style.flag} src={e.flagimage} alt="..." />
+                            </div>
                         </Link>
-                        <h2>Continente: {e.continente}</h2>
-                        <img src={e.flagimage} />
-                    </div>
-                ))
+                    ))
             }
         </div>
     )

@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // Actions
 import { getAllCountries, getActivities, getContinents, getActivitiesByCountry, order } from 'C:/Users/Angel/Desktop/PI/PI-Countries/client/src/Redux/actions/actions.js';
 
-function Filtros({ showAll, setShowOrder, showOrder, setShowContinent, watcherFunction, setShowActivityFilter }) {
+function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watcherFunction, setShowActivityFilter }) {
 
     const allCountries = useSelector(state => state.allCountries)
     const activities = useSelector(state => state.activities)
@@ -22,15 +22,22 @@ function Filtros({ showAll, setShowOrder, showOrder, setShowContinent, watcherFu
 
     const handlerOptionContinent = (e) => {
         let target = e.target.value;
-        dispatch(getContinents(target, allCountries));
-        watcherFunction(target)
-        setShowActivityFilter(false)
+        console.log(target)
+        if (target !== 'Empty') {
+            dispatch(getContinents(target, allCountries));
+            watcherFunction(target)
+            setShowContinent(true)
+            setShowActivityFilter(false)
+            setShowCountry(false)
+        }
     }
 
     const handlerOptionActivity = (e) => {
         let target = e.target.value;
-        dispatch(getActivitiesByCountry(target, activities));
-        setShowActivityFilter(true)
+        if (target !== 'Empty' || 'No Activity') {
+            dispatch(getActivitiesByCountry(target, activities));
+            setShowActivityFilter(true)
+        }
     }
     // Sacando los repetidos
     // Continente
@@ -78,7 +85,7 @@ function Filtros({ showAll, setShowOrder, showOrder, setShowContinent, watcherFu
         })
         watcherFunction(target)
         setShowActivityFilter(false)
-        
+
     }
 
     const orderNow = (e) => {
@@ -87,6 +94,7 @@ function Filtros({ showAll, setShowOrder, showOrder, setShowContinent, watcherFu
         // console.log(option1, option2)
         if (option1 && option2) {
             dispatch(order(option1, option2, allCountries))
+            setShowCountry(false)
         }
     }
 
@@ -161,7 +169,8 @@ function Filtros({ showAll, setShowOrder, showOrder, setShowContinent, watcherFu
             <div>
                 <button className={style.filterButtons} onClick={showOpCont2}>Buscar Por Contienente</button>
                 <form >
-                    <select className={style.selectWidth} onChange={handlerOptionContinent} hidden={showOpCont ? true : false} onFocus={() => setShowContinent(true)}>
+                    <select className={style.selectWidth} onChange={handlerOptionContinent} hidden={showOpCont ? true : false} >
+                        <option value='Empty'></option>
                         {
                             resultContinentes.map(e => (
                                 <option className={style.options} value={e} >{e}</option>
@@ -176,16 +185,16 @@ function Filtros({ showAll, setShowOrder, showOrder, setShowContinent, watcherFu
                 <button className={style.filterButtons} onClick={showSelect}>Buscar Por Actividad Turistica</button>
                 <div hidden={showActivityMenu ? false : true}>
                     <select className={style.selectWidth} onChange={handlerOptionActivity} >
-                        <option></option>
+                        <option value='Empty'></option>
                         {
                             resultActividades[0] ? resultActividades.map(e => (
 
                                 <option className={style.options} value={e}>{e}</option>
-                            )) : <option> No Hay Actividades </option>
+                            )) : <option value='No Activity'> No Hay Actividades </option>
 
                         }
                     </select>
-                   {/*  <Link to='/filtradosactividad'>
+                    {/*  <Link to='/filtradosactividad'>
                         <button disabled={!resultActividades[0] ? true : false}>Buscar</button>
                     </Link> */}
                 </div>

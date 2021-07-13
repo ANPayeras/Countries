@@ -6,17 +6,36 @@
 }
 
 .country {
+    background-color: rgba(0, 0, 0, 0.5);
     border: 2px solid black;
-    display: grid;
-    justify-content: center;
-    margin: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
     height: 180px;
 }
 
-.country img{
-    border: 2px solid black;
-    width: 100px;
-    height: auto;
+.country:hover {
+    cursor: pointer;
+    border: 2px solid brown;
+    box-shadow: 3px 5px 10px 0.5px rgba(255, 255, 255, 0.3);
+    transition: all 0.1s ease-in-out;
+}
+
+.country div h3 {
+    font-size: 12px;
+    color: white;
+    text-align: center;
+    margin: 2px;
+    width: 100%;
+}
+
+.flag {
+    border: 1px solid white;
+    margin-top: 10px;
+    width: 180px;
+    height: 100px;
+    object-fit: cover;
 }
 
 .searchBarContainer {
@@ -34,6 +53,12 @@
     color: white;
 }
 
+.pages h3:hover {
+    border-radius: 10px;
+    box-shadow: 3px 5px 10px 0.5px rgba(255, 255, 255, 0.3);
+    transition: all 0.4s linear;
+}
+
 .pages button {
     background-color: rgba(0, 0, 0, 0);
     color: white;
@@ -44,4 +69,22 @@
 .pages button:hover {
     cursor: pointer;
     color: brown;
+}
+
+.filters {
+    box-shadow: 5px 10px 10px 1px rgba(255, 255, 255, 0.5);
+    transition: all 0.8s linear;
+}
+
+.filtersOff {
+    position: absolute;
+    top: -100px;
+}
+
+.msg  {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 50px;
+    background-color: rgba(0, 0, 0, 0.5);
 }

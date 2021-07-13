@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // Icons
 import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
@@ -25,9 +26,11 @@ function Home() {
     const dispatch = useDispatch()
     const allCountries = useSelector(state => state.allCountries)
     const searchedCountry = useSelector(state => state.searchedCountry)
+   
+
 
     const api = 'http://localhost:3001/countries?page=';
-    const [showComponents, setShowComponents] = useState(false)
+    const [showComponents, setShowComponents] = useState(true)
     const [showCountry, setShowCountry] = useState(false)
     const [page, setPage] = useState({
         currentPage: 0,
@@ -37,7 +40,7 @@ function Home() {
         limit: 0
     })
     const { currentPage, nextPage, totalPages, limit } = page;
-    console.log(page)
+    // console.log(page)
     useEffect(() => {
         countriesByPage();
         dispatch(getAllCountries());
@@ -134,8 +137,9 @@ function Home() {
     return (
         <div >
             <NavBar showFilters={showFilters} />
-            <div className='filtros' hidden={showComponents ? true : false}><Filtros showAll={showAll} showOrder={showOrder} setShowOrder={setShowOrder}
+            <div className={showComponents ? style.filtersOff : style.filters} /* hidden={showComponents ? true : false} */><Filtros showAll={showAll} showOrder={showOrder} setShowOrder={setShowOrder}
                 setShowContinent={setShowContinent} watcherFunction={watcherFunction} setShowActivityFilter={setShowActivityFilter}
+                setShowCountry={setShowCountry}
             /></div>
             {
                 showActivityFilter ? null :
@@ -155,16 +159,20 @@ function Home() {
                                     {
 
                                         allCountries ? allCountries.slice(currentPage * limit, nextPage * limit).map(e => (
-                                            <div key={e.id} className={style.country}>
-                                                <h3>Nombre: {e.name}</h3>
-                                                <h3>Continente: {e.continente}</h3>
-                                                <img src={e.flagimage} alt="" />
-                                            </div>
+                                            <Link to={`/detallepais/${e.id}`}>
+                                                <div key={e.id} className={style.country}>
+                                                    <div>
+                                                        <h3>{e.name}</h3>
+                                                        <h3>{e.continente}</h3>
+                                                    </div>
+                                                    <img className={style.flag} src={e.flagimage} alt="..." />
+                                                </div>
+                                            </Link>
                                         )) : <p>No hay paises</p>
                                     }
                                 </div>
             }
-            {showActivityFilter ? null :
+            {showActivityFilter /* || searchedCountry[0] && searchedCountry[0].msg */ ? null :
                 <div className={style.pages}>
                     <button name='anterior' onClick={changePage}><IoArrowBackOutline /></button>
                     <h3>Pagina {currentPage + 1} de {totalPages}</h3>

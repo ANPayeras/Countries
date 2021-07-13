@@ -2,6 +2,8 @@ import React from 'react';
 
 // Redux
 import { useSelector } from 'react-redux';
+// Styles
+import style from './ActivityFilter.module.css'
 
 function ActivityFilter() {
 
@@ -27,18 +29,16 @@ function ActivityFilter() {
     // console.log(resultPaises)
 
     return (
-        <div>
-            <ul>
-                <h1>Actividad Turistica: {resultActividades[0] ? resultActividades : 'No hay Actividades'}</h1>
-                <h2>{resultActividades[0] ? 'Paises donde se realizan:' : null}</h2>
-                {
-                    resultPaises.map((e, i) => (
-                        <div>
-                            <li key={i}>{e}</li>
-                        </div>
-                    ))
-                }
-            </ul>
+        <div className={style.container}>
+
+            <h1>Actividad Turistica: {resultActividades[0] && resultActividades}</h1>
+            <h2>{resultActividades[0] ? 'Paises donde se realiza:' : null}</h2>
+            {
+                resultPaises.map((e, i) => (
+                    <div className={style.countries} key={i}>
+                        <h4>{e}</h4>
+                    </div>
+                ))}
         </div>
     )
 }

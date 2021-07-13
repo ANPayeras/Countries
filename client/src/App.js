@@ -1,25 +1,19 @@
-import './App.css';
+import style from './App.module.css';
 
-import { Route, Link } from 'react-router-dom';
-import Home from './components/Home';
-import PaisesBuscados from './components/PaisesBuscados';
-import FiltradosContinente from './components/FiltradosContinente';
-import FiltradosActividad from './components/FiltradosActividad';
-import DetallePais from './components/DetallePais';
-import OrderFilter from './components/OrderFilter';
-import PostActivity from './components/PostActivity';
-
-// Estado UseContext
-// import UserState from './context/UserState';
-
+import { Route } from 'react-router-dom';
+import Home from './components/Home/Home';
+import PaisesBuscados from './components/SearchedCountry/PaisesBuscados';
+import FiltradosContinente from './components/ContinentFilter/FiltradosContinente';
+import FiltradosActividad from './components/ActivityFilter/FiltradosActividad';
+import DetallePais from './components/CountryDetail/DetallePais';
+import OrderFilter from './components/OrderFilter/OrderFilter';
+import PostActivity from './components/PostActivity/PostActivity';
+import Enter from './components/Enter';
 
 function App() {
   return (
     <>
-
-      <Route exact path="/">
-        <Link to='/home'> INGRESAR </Link>
-      </Route>
+      <Route exact path="/" component={Enter} />
       <Route path="/home" component={Home} />
       <Route path="/paisesbuscados" component={PaisesBuscados} />
       <Route path="/filtradoscontinente" component={FiltradosContinente} />
@@ -27,7 +21,6 @@ function App() {
       <Route path="/OrderFilter" component={OrderFilter} />
       <Route path="/detallepais/:id" render={({ match }) => <DetallePais match={match} />} />
       <Route exact path="/postactivity" component={PostActivity} />
-
     </>
   );
 }

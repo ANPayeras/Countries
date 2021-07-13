@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
 // Redux
 import { useSelector } from 'react-redux';
+// Styles 
+import style from '../Home/Home.module.css';
 
 function FiltradosContinente({ page, setPage, watcher }) {
 
@@ -25,22 +28,21 @@ function FiltradosContinente({ page, setPage, watcher }) {
 
 
     return (
-        <div>
-            <ul>
-                {
-                    countriesByContinent[0] && countriesByContinent.slice(page.currentPage * page.limit, page.nextPage * page.limit).map(e => (
-                        <div>
-                            <li key={e.id}>
-                                <Link to={`/detallepais/${e.id}`}>
-                                    {e.name}
-                                </Link>
-                            </li>
-                            <img src={e.flagimage} />
+        <div className={style.container}>
+            {
+                countriesByContinent[0] && countriesByContinent.slice(page.currentPage * page.limit, page.nextPage * page.limit).map(e => (
+                    <Link to={`/detallepais/${e.id}`}>
+                        <div key={e.id} className={style.country}>
+                            <div >
+                                <h3>{e.name}</h3>
+                                <h3>{e.continente}</h3>
+                            </div>
+                            <img className={style.flag} src={e.flagimage} alt="..." />
                         </div>
-                    ))
-                }
-            </ul>
-        </div>
+                    </Link>
+                ))
+            }
+        </div >
     )
 }
 
