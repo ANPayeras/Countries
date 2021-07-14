@@ -32,11 +32,19 @@
     margin: 10px 0;
     padding: 5px 5px;
     color: white;
+    font-size: 15px;
 }
 
 .linkNav:hover {
     cursor: pointer;
     border-bottom: solid 1px brown;
+}
+
+.navbar span {
+    display: flex;
+    align-items: center;
+    color: brown;
+    font-size: 15px;
 }
 
 
