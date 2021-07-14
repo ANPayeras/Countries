@@ -42,12 +42,6 @@ function Home() {
         limit: 0
     })
     const { currentPage, nextPage, totalPages, limit } = page;
-    console.log(page)
-
-    /*   useEffect(() => {
-          countriesByPage();
-          dispatch(getAllCountries());
-      }, []) */
 
     const countriesByPage = async () => {
         const listadoDePaises = await axios.get(`${api}0`);
@@ -130,7 +124,7 @@ function Home() {
 
     return (
         <div >
-            <NavBar showFilters={showFilters} />
+            <NavBar showFilters={showFilters} showAll={showAll} />
             <div className={showComponents ? style.filtersOff : style.filters} /* hidden={showComponents ? true : false} */><Filtros showAll={showAll} showOrder={showOrder} setShowOrder={setShowOrder}
                 setShowContinent={setShowContinent} watcherFunction={watcherFunction} setShowActivityFilter={setShowActivityFilter}
                 setShowCountry={setShowCountry}
@@ -168,7 +162,7 @@ function Home() {
                                     }
                                 </div>
             }
-            {showActivityFilter /* || searchedCountry[0] && searchedCountry[0].msg */ ? null :
+            {showActivityFilter ? null :
                 <div className={style.pages}>
                     <button name='anterior' onClick={changePage}><IoArrowBackOutline /></button>
                     <h3>Pagina {currentPage + 1} de {showCountry ? Math.ceil(searchedCountry.length / limit) : totalPages}</h3>

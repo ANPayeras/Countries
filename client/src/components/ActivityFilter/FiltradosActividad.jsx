@@ -14,7 +14,7 @@ function ActivityFilter() {
     })
     const actividadesFiltradas = new Set(actividades);
     let resultActividades = [...actividadesFiltradas];
-    console.log(resultActividades)
+    // console.log(resultActividades)
 
     let paises = activitiesByCountry.map(e => e.countries)
     // console.log(paises) // array con array de paises

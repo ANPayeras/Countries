@@ -12,7 +12,6 @@
 
 .home:hover {
     color: brown
-
 }
 
 .filters {
@@ -40,7 +39,7 @@
     border-bottom: solid 1px brown;
 }
 
-.navbar span {
+.navbarDetail {
     display: flex;
     align-items: center;
     color: brown;

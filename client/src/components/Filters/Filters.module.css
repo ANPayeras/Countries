@@ -42,7 +42,7 @@
 
 .select {
     background-color: brown;
-    color: white;
+    color: white; 
 }
 
 .options {
@@ -52,7 +52,8 @@
 
 .select:hover,
 .continentForm:hover,
-.options:hover {
+.options:hover,
+.selectWidth:hover {
   cursor: pointer;
 }
 

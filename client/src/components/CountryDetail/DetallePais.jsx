@@ -16,6 +16,7 @@ function DetallePais({ match }) {
     const dispatch = useDispatch()
 
     const { id, name, continente, capital, subRegion, population, area, flagimage, activities } = countryById
+    let noInfo = 'Sin Datos'
 
     useEffect(() => {
         dispatch(getCountryById(match.params.id));
@@ -36,13 +37,13 @@ function DetallePais({ match }) {
                     <h1>Area: </h1>
                 </div>
                 <div className={style.data}>
-                    <h1>{name}</h1>
-                    <h1>{id}</h1>
-                    <h1>{continente}</h1>
-                    <h1>{capital}</h1>
-                    <h1>{subRegion}</h1>
-                    <h1>{population} Millones</h1>
-                    <h1>{area} Km2</h1>
+                    <h1>{name ? name : noInfo}</h1>
+                    <h1>{id ? id : noInfo}</h1>
+                    <h1>{continente ? continente : noInfo}</h1>
+                    <h1>{capital ? capital : noInfo}</h1>
+                    <h1>{subRegion ? subRegion : noInfo}</h1>
+                    <h1>{population ? population + ' Millones' : noInfo} </h1>
+                    <h1>{area ? area + ' Km2' : noInfo}</h1>
                 </div>
                 <div className={style.flagContainer}>
                     <img src={flagimage} className={style.flag} />

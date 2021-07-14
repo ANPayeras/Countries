@@ -11,7 +11,7 @@ function NavBarDetail() {
         <>
             <div className={styles.navbar}>
                 <Link to='/home' className={styles.home}> <GiWorld /> </Link>
-                <span>Detalles del Pais</span>
+                <span className={styles.navbarDetail}>Detalles del Pais</span>
                 <Link className={styles.linkNav} to='/postactivity'>Crear Actividad Turistica</Link>
             </div>
         </>

@@ -34,7 +34,10 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
 
     const handlerOptionActivity = (e) => {
         let target = e.target.value;
-        if (target !== 'Empty' || 'No Activity') {
+        console.log(target)
+        if (target === 'Empty' || target === 'No Activity') {
+            return null
+        } else {
             dispatch(getActivitiesByCountry(target, activities));
             setShowActivityFilter(true)
         }
@@ -170,7 +173,7 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
                 <button className={style.filterButtons} onClick={showOpCont2}>Buscar Por Contienente</button>
                 <form >
                     <select className={style.selectWidth} onChange={handlerOptionContinent} hidden={showOpCont ? true : false} >
-                        <option value='Empty'></option>
+                        <option value='Empty'>Seleccionar</option>
                         {
                             resultContinentes.map(e => (
                                 <option className={style.options} value={e} >{e}</option>
@@ -185,7 +188,7 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
                 <button className={style.filterButtons} onClick={showSelect}>Buscar Por Actividad Turistica</button>
                 <div hidden={showActivityMenu ? false : true}>
                     <select className={style.selectWidth} onChange={handlerOptionActivity} >
-                        <option value='Empty'></option>
+                        <option value='Empty'>Seleccionar</option>
                         {
                             resultActividades[0] ? resultActividades.map(e => (
 

@@ -14,11 +14,10 @@ function PaisesBuscados({ page }) {
         <div className={style.container}>
             {
                 searchedCountry[0] && searchedCountry[0].msg ? searchedCountry.map(e => (<span className={style.msg}>{e.msg}</span>))
-                    : searchedCountry.slice(page.currentPage * page.limit, page.nextPage * page.limit).map((e, i) => (
+                    : searchedCountry.slice(page.currentPage * page.limit, page.nextPage * page.limit).map((e) => (
                         <Link to={`/detallepais/${e.id}`}>
                             <div key={e.id} className={style.country}>
                                 <div>
-                                    <h1>{e.msg}</h1>
                                     <h3>{e.name}</h3>
                                     <h3>{e.continente}</h3>
                                 </div>
