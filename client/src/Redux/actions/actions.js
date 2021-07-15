@@ -73,7 +73,7 @@ export const order = (option, direcction, allCoun) => {
         if (option === 'Nombre' && direcction === 'Ascendente') {
             // const orderAsc = allCountries2.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
             const orderAsc = allCountries2.sort((a, b) => (a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? 1 : a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? -1 : 0))
-            console.log(orderAsc)
+            // console.log(orderAsc)
             dispatch({
                 type: 'ORDER',
                 payload: orderAsc

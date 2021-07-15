@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 
 // Components
 import NavBarActivity from '../NavBarActivity/NavBarActivity';
-// Icons
-import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 // Actions

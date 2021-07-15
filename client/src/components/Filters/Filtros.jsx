@@ -34,7 +34,7 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
 
     const handlerOptionActivity = (e) => {
         let target = e.target.value;
-        console.log(target)
+        // console.log(target)
         if (target === 'Empty' || target === 'No Activity') {
             return null
         } else {
@@ -81,7 +81,7 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
 
     const orderHandler = (e) => {
         let target = e.target.value
-        console.log(target)
+        // console.log(target)
         setOrderFilter({
             ...orderFilter,
             [e.target.name]: target
@@ -93,38 +93,11 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
 
     const orderNow = (e) => {
         e.preventDefault();
-        // const { option1, option2 } = orderFilter
-        // console.log(option1, option2)
         if (option1 && option2) {
             dispatch(order(option1, option2, allCountries))
             setShowCountry(false)
         }
     }
-
-    /* const activateOrder = (e) => {
-        let target = e.target.name
-        const { option1, option2 } = orderFilter
-
-        console.log(option1, option2)
-        if (target === 'Nombre') {
-            setOrderFilter({
-                ...orderFilter,
-                name: !orderFilter.name,
-                option1: e.target.value
-            })
-        } else if (target === 'Poblacion') {
-            setOrderFilter({
-                ...orderFilter,
-                population: !orderFilter.population,
-                option1: e.target.value
-            })
-        } else if (e.target.name === 'Ascendente' || e.target.name === 'Descendente') {
-            setOrderFilter({
-                ...orderFilter,
-                option2: e.target.value
-            })
-        }
-    } */
 
     const showOptions = () => {
         setOrderFilter({
@@ -197,9 +170,6 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
 
                         }
                     </select>
-                    {/*  <Link to='/filtradosactividad'>
-                        <button disabled={!resultActividades[0] ? true : false}>Buscar</button>
-                    </Link> */}
                 </div>
             </div>
         </div >
