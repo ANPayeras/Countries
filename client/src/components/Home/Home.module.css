@@ -48,7 +48,7 @@
     width: 180px;
     height: 100px;
     object-fit: cover;
-    transition: all 0.8s ease-in-out;
+    transition: all 1s linear;
 }
 
 .flag:hover {

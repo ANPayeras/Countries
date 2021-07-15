@@ -2,9 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-// Icons
-import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
-
 // Styles
 import style from './Home.module.css'
 
@@ -32,7 +29,7 @@ function Home() {
     useEffect(() => {
         countriesByPage();
         dispatch(getAllCountries());
-    }, [])
+    }, [dispatch])
 
     const [page, setPage] = useState({
         currentPage: 0,
@@ -125,7 +122,8 @@ function Home() {
     return (
         <div >
             <NavBar showFilters={showFilters} showAll={showAll} />
-            <div className={showComponents ? style.filtersOff : style.filters} /* hidden={showComponents ? true : false} */><Filtros showAll={showAll} showOrder={showOrder} setShowOrder={setShowOrder}
+            <div className={showComponents ? style.filtersOff : style.filters} /* hidden={showComponents ? true : false} */>
+                <Filtros showAll={showAll} showOrder={showOrder} setShowOrder={setShowOrder}
                 setShowContinent={setShowContinent} watcherFunction={watcherFunction} setShowActivityFilter={setShowActivityFilter}
                 setShowCountry={setShowCountry}
             /></div>
@@ -145,6 +143,7 @@ function Home() {
                         showOrder ? <OrderFilter page={page} setPage={setPage} watcher={watcher} /> :
 
                             showCountry ? <PaisesBuscados page={page} /> :
+
                                 <div className={style.container}>
                                     {
 
@@ -164,9 +163,9 @@ function Home() {
             }
             {showActivityFilter ? null :
                 <div className={style.pages}>
-                    <button name='anterior' onClick={changePage}><IoArrowBackOutline /></button>
+                    <button name='anterior' onClick={changePage}>🢀</button>
                     <h3>Pagina {currentPage + 1} de {showCountry ? Math.ceil(searchedCountry.length / limit) : totalPages}</h3>
-                    <button name='siguiente' onClick={changePage}><IoArrowForwardOutline /></button>
+                    <button name='siguiente' onClick={changePage}>🢂</button>
                 </div>
             }
         </div>
