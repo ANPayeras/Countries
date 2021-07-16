@@ -19,7 +19,7 @@ function PaisesBuscados({ page }) {
                             <div key={e.id} className={style.country}>
                                 <div>
                                     <h3>{e.name}</h3>
-                                    <h3>{e.continente}</h3>
+                                    <h3>{e.continente ? e.continente : <br />}</h3>
                                 </div>
                                 <img className={style.flag} src={e.flagimage} alt="..." />
                             </div>

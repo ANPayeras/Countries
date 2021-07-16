@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 // Styles
 import style from './Filters.module.css'
@@ -9,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // Actions
 import { getAllCountries, getActivities, getContinents, getActivitiesByCountry, order } from 'C:/Users/Angel/Desktop/PI/PI-Countries/client/src/Redux/actions/actions.js';
 
-function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watcherFunction, setShowActivityFilter }) {
+function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setShowActivityFilter, watcherFunction, showOrder, showByContinent, showActivityFilter }) {
 
     const allCountries = useSelector(state => state.allCountries)
     const activities = useSelector(state => state.activities)
@@ -20,15 +19,26 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
         dispatch(getActivities());
     }, [])
 
+    const [reset, setReset] = useState({
+        continent: 'Empty',
+        activity: ''
+    })
+    console.log(reset)
+
     const handlerOptionContinent = (e) => {
         let target = e.target.value;
         // console.log(target)
         if (target !== 'Empty') {
+            setReset({
+                ...reset,
+                continent: e.target.value
+            })
             dispatch(getContinents(target, allCountries));
             watcherFunction(target)
             setShowContinent(true)
             setShowActivityFilter(false)
             setShowCountry(false)
+            setShowOrder(false)
         }
     }
 
@@ -38,10 +48,17 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
         if (target === 'Empty' || target === 'No Activity') {
             return null
         } else {
+            setReset({
+                ...reset,
+                activity: e.target.value
+            })
             dispatch(getActivitiesByCountry(target, activities));
             setShowActivityFilter(true)
+            setShowOrder(false)
+            setShowContinent(false)
         }
     }
+
     // Sacando los repetidos
     // Continente
     let continentes = allCountries.map(e => {
@@ -49,8 +66,6 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
     })
     const continentesFiltrados = new Set(continentes);
     let resultContinentes = [...continentesFiltrados];
-
-    // console.log(resultContinentes)
     // Actividad
     let actividades = activities.map(e => {
         return e.name
@@ -61,7 +76,6 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
     // Orfer Filters
     const [orderFilter, setOrderFilter] = useState({
         name: false,
-        population: true,
         option1: '',
         option2: ''
     })
@@ -73,11 +87,38 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
             if (option1 && option2) {
                 dispatch(order(option1, option2, allCountries))
                 setShowOrder(true)
-                setShowContinent(false)
+                // setShowContinent(false)
+                setShowCountry(false)
             }
         }
         dispatchOrder()
     }, [orderFilter])
+
+    useEffect(() => {
+        const onOff = () => {
+            if (!showOrder) {
+                setOrderFilter({
+                    ...orderFilter,
+                    option1: '',
+                    option2: ''
+                })
+            }
+            if (!showByContinent) {
+                setReset({
+                    ...reset,
+                    continent: 'Empty'
+                })
+            }
+            if (!showActivityFilter) {
+                setReset({
+                    ...reset,
+                    activity: 'Empty'
+                })
+            }
+        }
+        onOff()
+    }, [showOrder, showByContinent, showActivityFilter])
+    console.log(showOrder, showByContinent, showActivityFilter)
 
     const orderHandler = (e) => {
         let target = e.target.value
@@ -88,32 +129,33 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
         })
         watcherFunction(target)
         setShowActivityFilter(false)
-
     }
 
-    const orderNow = (e) => {
-        e.preventDefault();
-        if (option1 && option2) {
-            dispatch(order(option1, option2, allCountries))
-            setShowCountry(false)
+    const [showSelectOp, setShowSelectOp] = useState({
+        continenyOP: false,
+        activityOp: false
+    })
+
+    const showSelect = (e) => {
+        let target = e.target.name
+        if (target === 'Name Population') {
+            setOrderFilter({
+                ...orderFilter,
+                name: !orderFilter.name
+            })
         }
-    }
-
-    const showOptions = () => {
-        setOrderFilter({
-            ...orderFilter,
-            name: !orderFilter.name
-        })
-    }
-
-    const [showOpCont, setshowOpCont] = useState(true)
-    const showOpCont2 = () => {
-        setshowOpCont(!showOpCont)
-    }
-
-    const [showActivityMenu, setShowActivityMenu] = useState(false)
-    const showSelect = () => {
-        setShowActivityMenu(!showActivityMenu)
+        if (target === 'Continent Select') {
+            setShowSelectOp({
+                ...showSelectOp,
+                continenyOP: !showSelectOp.continenyOP
+            })
+        }
+        if (target === 'Activity Select') {
+            setShowSelectOp({
+                ...showSelectOp,
+                activityOp: !showSelectOp.activityOp
+            })
+        }
     }
 
     //---
@@ -122,45 +164,45 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, watc
         <div className={style.container}>
 
             <div className={style.showAll}>
-                <Link to='/home'><button className={style.showAllButton} onClick={showAll}>Mostrar Todos Los Paises</button></Link>
+                <button className={style.showAllButton} onClick={showAll}>Mostrar Todos Los Paises</button>
             </div>
 
             <div>
-                <button className={style.filterButtons} type='button' onClick={showOptions}>Bucar Por Nombre y Poblacion</button>
+                <button className={style.filterButtons} type='button' name='Name Population' onClick={showSelect}>Bucar Por Nombre y Poblacion</button>
 
-                <form onChange={orderHandler} onClick={orderNow} hidden={orderFilter.name ? false : true}>
-                    <select className={style.select} name='option1' >
+                <div onChange={orderHandler} hidden={orderFilter.name ? false : true}>
+                    <select className={style.select} name='option1' value={orderFilter.option1}>
                         <option className={style.options}>Seleccionar</option>
                         <option className={style.options} value="Nombre">Nombre</option>
                         <option className={style.options} value="Poblacion">Poblacion</option>
                     </select>
-                    <select className={style.select} hidden={orderFilter.name ? false : true} name='option2' >
+                    <select className={style.select} hidden={orderFilter.name ? false : true} name='option2' value={orderFilter.option2}>
                         <option className={style.options}>Seleccionar</option>
                         <option className={style.options} value="Ascendente">Ascendente</option>
                         <option className={style.options} value="Descendente">Descendente</option>
                     </select>
-                </form>
+                </div>
             </div>
 
             <div>
-                <button className={style.filterButtons} onClick={showOpCont2}>Buscar Por Contienente</button>
-                <form >
-                    <select className={style.selectWidth} onChange={handlerOptionContinent} hidden={showOpCont ? true : false} >
+                <button className={style.filterButtons} onClick={showSelect} name='Continent Select'>Buscar Por Contienente</button>
+                <div >
+                    <select className={style.selectWidth} onChange={handlerOptionContinent} hidden={showSelectOp.continenyOP ? false : true} value={reset.continent}>
                         <option value='Empty'>Seleccionar</option>
                         {
-                            resultContinentes.map(e => (
-                                <option className={style.options} value={e} >{e}</option>
+                            resultContinentes.map((e, i) => (
+                                <option key={i} className={style.options} value={e}>{e}</option>
                             ))
 
                         }
                     </select>
-                </form>
+                </div>
             </div>
 
             <div>
-                <button className={style.filterButtons} onClick={showSelect}>Buscar Por Actividad Turistica</button>
-                <div hidden={showActivityMenu ? false : true}>
-                    <select className={style.selectWidth} onChange={handlerOptionActivity} >
+                <button className={style.filterButtons} onClick={showSelect} name='Activity Select'>Buscar Por Actividad Turistica</button>
+                <div hidden={showSelectOp.activityOp ? false : true}>
+                    <select className={style.selectWidth} onChange={handlerOptionActivity} value={reset.activity}>
                         <option value='Empty'>Seleccionar</option>
                         {
                             resultActividades[0] ? resultActividades.map(e => (

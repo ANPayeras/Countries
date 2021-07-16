@@ -55,9 +55,12 @@ function Home() {
 
     const changePage = (e) => {
         let { nextPage, totalPages, prevPage } = page;
-        // console.log(e.target.name)
-        if (e.target.name === 'siguiente') {
+        console.log(e.target.name)
+        if (e.target.name === 'siguiente' && !showCountry) {
             if (nextPage >= totalPages) return null
+            getPages(nextPage)
+        } else if (e.target.name === 'siguiente' && showCountry) {
+            if (nextPage >= Math.ceil(searchedCountry.length / limit)) return null
             getPages(nextPage)
         } else {
             if (prevPage < 0) return null;
@@ -124,14 +127,16 @@ function Home() {
             <NavBar showFilters={showFilters} showAll={showAll} />
             <div className={showComponents ? style.filtersOff : style.filters} /* hidden={showComponents ? true : false} */>
                 <Filtros showAll={showAll} showOrder={showOrder} setShowOrder={setShowOrder}
-                setShowContinent={setShowContinent} watcherFunction={watcherFunction} setShowActivityFilter={setShowActivityFilter}
-                setShowCountry={setShowCountry}
-            /></div>
+                    setShowContinent={setShowContinent} watcherFunction={watcherFunction} setShowActivityFilter={setShowActivityFilter}
+                    setShowCountry={setShowCountry} showOrder={showOrder} showByContinent={showByContinent}
+                    showActivityFilter={showActivityFilter}
+                /></div>
             {
                 showActivityFilter ? null :
                     <div className={style.searchBarContainer}>
                         <SearchBar showCountry={showCountry} setShowCountry={setShowCountry}
                             setShowOrder={setShowOrder} setShowContinent={setShowContinent}
+                            page={page} setPage={setPage}
                         />
                     </div>
             }
@@ -144,24 +149,25 @@ function Home() {
 
                             showCountry ? <PaisesBuscados page={page} /> :
 
-                                <div className={style.container}>
-                                    {
+                                allCountries ?
+                                    <div className={style.container}>
+                                        {
 
-                                        allCountries ? allCountries.slice(currentPage * limit, nextPage * limit).map(e => (
-                                            <Link to={`/detallepais/${e.id}`}>
-                                                <div key={e.id} className={style.country}>
-                                                    <div>
-                                                        <h3>{e.name}</h3>
-                                                        <h3>{e.continente}</h3>
+                                            allCountries.slice(currentPage * limit, nextPage * limit).map((e, i) => (
+                                                <Link to={`/detallepais/${e.id}`}>
+                                                    <div key={i} className={style.country}>
+                                                        <div>
+                                                            <h3>{e.name}</h3>
+                                                            <h3>{e.continente ? e.continente : <br />}</h3>
+                                                        </div>
+                                                        <img className={style.flag} src={e.flagimage} alt="..." />
                                                     </div>
-                                                    <img className={style.flag} src={e.flagimage} alt="..." />
-                                                </div>
-                                            </Link>
-                                        )) : <p>No hay paises</p>
-                                    }
-                                </div>
+                                                </Link>
+                                            ))
+                                        }
+                                    </div> : <p className={style.loading}>Cargando...</p>
             }
-            {showActivityFilter ? null :
+            {showActivityFilter || !allCountries[0] ? null :
                 <div className={style.pages}>
                     <button name='anterior' onClick={changePage}>🢀</button>
                     <h3>Pagina {currentPage + 1} de {showCountry ? Math.ceil(searchedCountry.length / limit) : totalPages}</h3>

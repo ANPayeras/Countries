@@ -27,12 +27,12 @@ function FiltradosContinente({ page, setPage, watcher }) {
     return (
         <div className={style.container}>
             {
-                countriesByContinent[0] && countriesByContinent.slice(page.currentPage * page.limit, page.nextPage * page.limit).map(e => (
+                countriesByContinent[0] && countriesByContinent.slice(page.currentPage * page.limit, page.nextPage * page.limit).map((e, i) => (
                     <Link to={`/detallepais/${e.id}`}>
-                        <div key={e.id} className={style.country}>
+                        <div key={i} className={style.country}>
                             <div >
                                 <h3>{e.name}</h3>
-                                <h3>{e.continente}</h3>
+                                <h3>{e.continente ? e.continente : <br />}</h3>
                             </div>
                             <img className={style.flag} src={e.flagimage} alt="..." />
                         </div>

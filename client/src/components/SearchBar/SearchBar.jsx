@@ -6,7 +6,7 @@ import { getSearchedCountry } from 'C:/Users/Angel/Desktop/PI/PI-Countries/clien
 // Styles
 import style from './SearchBar.module.css';
 
-function SearchBar({ setShowCountry, showCountry, setShowOrder, setShowContinent }) {
+function SearchBar({ setShowCountry, showCountry, setShowOrder, setShowContinent, page, setPage }) {
     const dispatch = useDispatch()
 
     const handlerChange = (e) => {
@@ -17,6 +17,12 @@ function SearchBar({ setShowCountry, showCountry, setShowOrder, setShowContinent
         dispatch(getSearchedCountry(target))
         setShowOrder(false)
         setShowContinent(false)
+        setPage({
+            ...page,
+            currentPage: 0,
+            nextPage: 1,
+            prevPage: 0
+        })
     }
 
     const showCountrySearched = (l) => {
@@ -29,9 +35,9 @@ function SearchBar({ setShowCountry, showCountry, setShowOrder, setShowContinent
 
     return (
         <div>
-            <input type="text" placeholder='Buscar Pais' 
-            onChange={handlerChange} value={!showCountry ? '' : null} 
-            className={style.input}
+            <input type="text" placeholder='Buscar Pais'
+                onChange={handlerChange} value={!showCountry ? '' : null}
+                className={style.input}
             />
         </div>
     )

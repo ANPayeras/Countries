@@ -25,12 +25,11 @@
     border: 2px solid brown;
     width: 280px;
     height: 200px;
-    object-fit: cover;
 }
 
 .flag:hover {
-    box-shadow: 5px 10px 10px 1px rgba(255, 255, 255, 0.5);
-    transition: all 0.4s linear;
+    box-shadow: 5px 10px 10px 1px rgba(255, 255, 255, 0.2);
+    transition: all 0.1s ease-in-out;
 }
 
 .title {

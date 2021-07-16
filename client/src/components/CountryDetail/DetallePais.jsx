@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
 // Components
 import NavBarDetail from '../NavBarDetail/NavBarDetail';
@@ -46,7 +45,7 @@ function DetallePais({ match }) {
                     <h1>{area ? area + ' Km2' : noInfo}</h1>
                 </div>
                 <div className={style.flagContainer}>
-                    <img src={flagimage} className={style.flag} />
+                    <img src={flagimage} className={style.flag} alt='...' />
                 </div>
             </div>
 
