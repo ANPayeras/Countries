@@ -9,8 +9,8 @@ const allCountries = async (_req, _res, next) => {
         const response = await axios.get('https://restcountries.eu/rest/v2/all')
         const paises = response.data;
 
-        paises.map(e => {
-            Country.create({
+        paises.map(async e => {
+            const result = await Country.create({
                 id: e.alpha3Code,
                 name: e.name,
                 flagimage: e.flag,
@@ -20,14 +20,13 @@ const allCountries = async (_req, _res, next) => {
                 area: e.area,
                 population: e.population
             })
+            return result
         })
 
     } catch (error) {
         next(error);
     }
 }
-
-
 
 const countries = async (req, res, next) => {
     const { name, page } = req.query
@@ -50,9 +49,6 @@ const countries = async (req, res, next) => {
             next(error)
         }
     } else if (page) {
-        /* Country.findAndCountAll({ limit: 10, offset: page })
-            .then(r => res.json(r))
-            .catch(error => next(error)) */
         paginate(page, 10)
             .then(r => res.json(r))
             .catch(error => next(error))
@@ -62,18 +58,6 @@ const countries = async (req, res, next) => {
             .catch(error => next(error))
     }
 }
-
-/* const countries = async (_req, res, next) => {
-    allCountries();
-    try {
-
-        const countries = await Country.findAll({ limit: 10 });
-        res.json(countries)
-
-    } catch (error) {
-        next(error);
-    }
-} */
 
 const countriesById = (req, res, next) => {
     const { idPais } = req.params;
@@ -97,6 +81,7 @@ const getActivities = (_req, res, next) => {
 
 const createActivity = async (req, res, next) => {
     const { name, dificulty, duration, season, countryId } = req.body
+    console.log(name, dificulty, duration, season, countryId)
     try {
         const activity = await Activity.create({ name, dificulty, duration, season })
         let idPaises;
