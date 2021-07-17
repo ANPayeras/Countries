@@ -12,6 +12,8 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
 
     const allCountries = useSelector(state => state.allCountries)
     const activities = useSelector(state => state.activities)
+    const countriesByContinent = useSelector(state => state.countriesByContinent)
+
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -24,6 +26,7 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
         activity: ''
     })
     console.log(reset)
+
 
     const handlerOptionContinent = (e) => {
         let target = e.target.value;
@@ -39,8 +42,12 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
             setShowActivityFilter(false)
             setShowCountry(false)
             setShowOrder(false)
+
+
         }
     }
+
+
 
     const handlerOptionActivity = (e) => {
         let target = e.target.value;
@@ -56,6 +63,8 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
             setShowActivityFilter(true)
             setShowOrder(false)
             setShowContinent(false)
+
+
         }
     }
 
@@ -85,10 +94,19 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
         const dispatchOrder = () => {
             // console.log(option1, option2)
             if (option1 && option2) {
-                dispatch(order(option1, option2, allCountries))
-                setShowOrder(true)
-                // setShowContinent(false)
-                setShowCountry(false)
+                if (!showOrder && !showByContinent) {
+                    dispatch(order(option1, option2, allCountries))
+                    setShowOrder(true)
+                    setShowContinent(false)
+                    setShowCountry(false)
+                    setShowActivityFilter(false)
+                } else {
+                    dispatch(order(option1, option2, countriesByContinent))
+                    setShowOrder(true)
+                    setShowContinent(false)
+                    setShowCountry(false)
+                    setShowActivityFilter(false)
+                }
             }
         }
         dispatchOrder()
@@ -96,14 +114,13 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
 
     useEffect(() => {
         const onOff = () => {
-            if (!showOrder) {
+
+            if (!showOrder && !showByContinent) {
                 setOrderFilter({
                     ...orderFilter,
                     option1: '',
                     option2: ''
                 })
-            }
-            if (!showByContinent) {
                 setReset({
                     ...reset,
                     continent: 'Empty'
@@ -117,6 +134,7 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
             }
         }
         onOff()
+        console.log(showOrder, showByContinent, showActivityFilter)
     }, [showOrder, showByContinent, showActivityFilter])
     console.log(showOrder, showByContinent, showActivityFilter)
 
@@ -128,7 +146,6 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
             [e.target.name]: target
         })
         watcherFunction(target)
-        setShowActivityFilter(false)
     }
 
     const [showSelectOp, setShowSelectOp] = useState({
@@ -176,7 +193,7 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
                         <option className={style.options} value="Nombre">Nombre</option>
                         <option className={style.options} value="Poblacion">Poblacion</option>
                     </select>
-                    <select className={style.select} hidden={orderFilter.name ? false : true} name='option2' value={orderFilter.option2}>
+                    <select className={style.select} name='option2' value={orderFilter.option2}>
                         <option className={style.options}>Seleccionar</option>
                         <option className={style.options} value="Ascendente">Ascendente</option>
                         <option className={style.options} value="Descendente">Descendente</option>

@@ -67,9 +67,9 @@ export const getActivitiesByCountry = (target, allCoun) => {
     }
 }
 
-export const order = (option, direcction, allCoun) => {
+export const order = (option, direcction, countries) => {
     return function (dispatch) {
-        let allCountries2 = [...allCoun];
+        let allCountries2 = [...countries];
         if (option === 'Nombre' && direcction === 'Ascendente') {
             // const orderAsc = allCountries2.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
             const orderAsc = allCountries2.sort((a, b) => (a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? 1 : a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? -1 : 0))
@@ -104,3 +104,4 @@ export const order = (option, direcction, allCoun) => {
         }
     }
 }
+

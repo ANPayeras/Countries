@@ -55,7 +55,7 @@ function Home() {
 
     const changePage = (e) => {
         let { nextPage, totalPages, prevPage } = page;
-        console.log(e.target.name)
+        // console.log(e.target.name)
         if (e.target.name === 'siguiente' && !showCountry) {
             if (nextPage >= totalPages) return null
             getPages(nextPage)
@@ -121,6 +121,7 @@ function Home() {
             })
         }
     }
+
 
     return (
         <div >
