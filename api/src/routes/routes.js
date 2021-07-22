@@ -63,36 +63,33 @@ const countriesById = (req, res, next) => {
     const { idPais } = req.params;
     Country.findOne({
         where: { id: idPais },
-        attributes: ['id', 'name', 'flagimage', 'continente', 'capital', 'subRegion', 'area', 'population'],
         include: [Activity]
     })
-        .then(respuesta => { res.json({ respuesta }) })
+        .then(response => res.json({ response }))
         .catch(error => next(error))
 }
 
 const getActivities = (_req, res, next) => {
     Activity.findAll({
-        attributes: ['id', 'name', 'dificulty', 'duration', 'season'],
         include: [Country]
     })
-        .then(respuesta => { res.json({ respuesta }) })
+        .then(response => res.json({ response }))
         .catch(error => next(error))
 }
 
 const createActivity = async (req, res, next) => {
     const { name, dificulty, duration, season, countryId } = req.body
-    console.log(name, dificulty, duration, season, countryId)
+    // console.log(name, dificulty, duration, season, countryId)
     try {
         const activity = await Activity.create({ name, dificulty, duration, season })
         let idPaises;
         if (Array.isArray(countryId)) {
             idPaises = await Promise.all(countryId.map(value => Country.findByPk(value)))
         } else {
-            idPaises = await Promise.all([Country.findByPk(countryId)])
+            idPaises = await Promise.all(Country.findByPk(countryId))
         }
 
         await activity.setCountries(idPaises); // seteamos la relacion de la actividad recien creada con los paises pasados por body
-
 
         res.json({ msg: 'Actividad Agregada' })
     } catch (error) {
