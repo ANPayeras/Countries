@@ -125,7 +125,6 @@ function Home() {
         }
     }
 
-
     return (
         <div >
             <NavBar showFilters={showFilters} showAll={showAll} />
@@ -144,7 +143,7 @@ function Home() {
                         <SearchBar showCountry={showCountry} setShowCountry={setShowCountry}
                             setShowOrder={setShowOrder} setShowContinent={setShowContinent}
                             page={page} setPage={setPage}
-
+                            setShowAllCountry={setShowAllCountry}
                         />
                     </div>
             }

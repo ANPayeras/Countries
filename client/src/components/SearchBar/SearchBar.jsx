@@ -6,7 +6,7 @@ import { getSearchedCountry } from 'C:/Users/Angel/Desktop/PI/PI-Countries/clien
 // Styles
 import style from './SearchBar.module.css';
 
-function SearchBar({ setShowCountry, showCountry, setShowOrder, setShowContinent, page, setPage }) {
+function SearchBar({ setShowCountry, showCountry, setShowOrder, setShowContinent, page, setPage, setShowAllCountry }) {
     const dispatch = useDispatch()
 
     const handlerChange = (e) => {
@@ -17,6 +17,7 @@ function SearchBar({ setShowCountry, showCountry, setShowOrder, setShowContinent
         dispatch(getSearchedCountry(target))
         setShowOrder(false)
         setShowContinent(false)
+        setShowAllCountry(true)
         setPage({
             ...page,
             currentPage: 0,
