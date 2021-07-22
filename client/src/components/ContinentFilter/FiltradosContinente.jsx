@@ -28,7 +28,7 @@ function FiltradosContinente({ page, setPage, watcher }) {
         <div className={style.container}>
             {
                 countriesByContinent[0] && countriesByContinent.slice(page.currentPage * page.limit, page.nextPage * page.limit).map((e, i) => (
-                    <Link to={`/detallepais/${e.id}`}>
+                    <Link to={`/countryDetail/${e.id}`}>
                         <div key={i} className={style.country}>
                             <div >
                                 <h3>{e.name}</h3>

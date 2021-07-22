@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // Redux
 import { useSelector } from 'react-redux';
@@ -8,37 +9,51 @@ import style from './ActivityFilter.module.css'
 function ActivityFilter() {
 
     const activitiesByCountry = useSelector(state => state.activitiesByCountry)
+    const allCountries = useSelector(state => state.allCountries)
 
-    let actividades = activitiesByCountry.map(e => {
+    let activities = activitiesByCountry.map(e => {
         return e.name
     })
-    const actividadesFiltradas = new Set(actividades);
-    let resultActividades = [...actividadesFiltradas];
-    // console.log(resultActividades)
+    const filterActivities = new Set(activities);
+    let resultActivities = [...filterActivities];
+    // console.log(resultActivities)
 
-    let paises = activitiesByCountry.map(e => e.countries)
-    // console.log(paises) // array con array de paises
+    let countries = activitiesByCountry.map(e => e.countries)
+    // console.log(countries) // array con array de paises
 
-    let nombresdePaises = [];
-    paises.map(e => e.map(e => nombresdePaises.push(e.name)))  // unico array con todos los nombres
+    let countryNames = [];
+    countries.map(e => e.map(e => countryNames.push(e.name)))  // unico array con todos los nombres
 
+    // onsole.log(countryNames)
 
-    const paisesFiltrados = new Set(nombresdePaises);
-    let resultPaises = [...paisesFiltrados]; // array sin duplicados
+    const filterCountryNames = new Set(countryNames);
+    let resultCountries = [...filterCountryNames]; // array sin duplicados
 
-    // console.log(resultPaises)
+    // console.log(resultCountries)
+
+    let countriesArr = []
+    for (let i = 0; i < resultCountries.length; i++) {
+        let count = allCountries.filter(e => e.name === resultCountries[i])
+        countriesArr.push(count)
+    }
+   
+    // console.log(countriesArr)
 
     return (
         <div className={style.container}>
 
-            <h1>Actividad Turistica: {resultActividades[0] && resultActividades}</h1>
-            <h2>{resultActividades[0] ? 'Paises donde se realiza:' : null}</h2>
+            <h1>Actividad Turistica: {resultActivities[0] && resultActivities}</h1>
+            <h2>{resultActivities[0] ? 'Paises donde se realiza:' : null}</h2>
+         
             {
-                resultPaises.map((e, i) => (
-                    <div className={style.countries} key={i}>
-                        <h4>{e}</h4>
+                countriesArr.map(e => e.map(e => (
+                    <div className={style.countries} key={e.id}>
+                        <Link to={`/countryDetail/${e.id}`}>
+                            <h4>{e.name}</h4>
+                        </Link>
                     </div>
-                ))}
+                )))
+            }
         </div>
     )
 }

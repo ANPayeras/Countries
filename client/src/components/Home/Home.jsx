@@ -41,15 +41,15 @@ function Home() {
     const { currentPage, nextPage, totalPages, limit } = page;
 
     const countriesByPage = async () => {
-        const listadoDePaises = await axios.get(`${api}0`);
-        const totalPages = Math.ceil(listadoDePaises.data.total / listadoDePaises.data.limit);
+        const countryList = await axios.get(`${api}0`);
+        const totalPages = Math.ceil(countryList.data.total / countryList.data.limit);
         setPage({
             ...page,
-            currentPage: listadoDePaises.data.currentPage,
-            nextPage: listadoDePaises.data.nextPage,
-            prevPage: listadoDePaises.data.previousPage,
+            currentPage: countryList.data.currentPage,
+            nextPage: countryList.data.nextPage,
+            prevPage: countryList.data.previousPage,
             totalPages: totalPages,
-            limit: listadoDePaises.data.limit
+            limit: countryList.data.limit
         })
     }
 
@@ -69,21 +69,24 @@ function Home() {
     }
 
     const getPages = async (pages) => {
-        const listadoDePaises = await axios.get(`${api}${pages}`);
+        const countryList = await axios.get(`${api}${pages}`);
         setPage({
             ...page,
-            currentPage: listadoDePaises.data.currentPage,
-            nextPage: listadoDePaises.data.nextPage,
-            prevPage: listadoDePaises.data.previousPage
+            currentPage: countryList.data.currentPage,
+            nextPage: countryList.data.nextPage,
+            prevPage: countryList.data.previousPage
         })
     }
 
     const [showComponents, setShowComponents] = useState(true)
+    // Components buttons
     const [showCountry, setShowCountry] = useState(false)
     const [showOrder, setShowOrder] = useState(false)
     const [showByContinent, setShowContinent] = useState(false)
     const [showActivityFilter, setShowActivityFilter] = useState(false)
-
+    console.log('showOrder', showOrder)
+    const [showAllCountry, setShowAllCountry] = useState(false)
+    console.log('showAllCountry', showAllCountry)
     const showFilters = () => {
         setShowComponents(!showComponents)
     }
@@ -93,6 +96,7 @@ function Home() {
         setShowOrder(false)
         setShowContinent(false)
         setShowActivityFilter(false)
+        setShowAllCountry(true)
         setPage({
             ...page,
             currentPage: 0,
@@ -106,7 +110,6 @@ function Home() {
         continent: '',
         orders: ''
     })
-    // console.log(watcher.country)
 
     const watcherFunction = (e) => {
         if (e === 'Nombre' || e === 'Poblacion' || e === 'Ascendente' || e === 'Descendente') {
@@ -129,15 +132,19 @@ function Home() {
             <div className={showComponents ? style.filtersOff : style.filters} /* hidden={showComponents ? true : false} */>
                 <Filtros showAll={showAll} showOrder={showOrder} setShowOrder={setShowOrder}
                     setShowContinent={setShowContinent} watcherFunction={watcherFunction} setShowActivityFilter={setShowActivityFilter}
-                    setShowCountry={setShowCountry} showOrder={showOrder} showByContinent={showByContinent}
+                    setShowCountry={setShowCountry} showCountry={showCountry}
+                    showOrder={showOrder} showByContinent={showByContinent}
                     showActivityFilter={showActivityFilter}
-                /></div>
+                    showAllCountry={showAllCountry} setShowAllCountry={setShowAllCountry}
+                />
+            </div>
             {
                 showActivityFilter ? null :
                     <div className={style.searchBarContainer}>
                         <SearchBar showCountry={showCountry} setShowCountry={setShowCountry}
                             setShowOrder={setShowOrder} setShowContinent={setShowContinent}
                             page={page} setPage={setPage}
+
                         />
                     </div>
             }
@@ -155,13 +162,16 @@ function Home() {
                                         {
 
                                             allCountries.slice(currentPage * limit, nextPage * limit).map((e, i) => (
-                                                <Link to={`/detallepais/${e.id}`}>
+                                                <Link to={`/countryDetail/${e.id}`}>
                                                     <div key={i} className={style.country}>
                                                         <div>
                                                             <h3>{e.name}</h3>
                                                             <h3>{e.continente ? e.continente : <br />}</h3>
                                                         </div>
+
                                                         <img className={style.flag} src={e.flagimage} alt="..." />
+
+
                                                     </div>
                                                 </Link>
                                             ))
@@ -171,7 +181,7 @@ function Home() {
             {showActivityFilter || !allCountries[0] ? null :
                 <div className={style.pages}>
                     <button name='anterior' onClick={changePage}>🢀</button>
-                    <h3>Pagina {currentPage + 1} de {showCountry ? Math.ceil(searchedCountry.length / limit) : totalPages}</h3>
+                    <h3 className={style.title}>Pagina {currentPage + 1} de {showCountry ? Math.ceil(searchedCountry.length / limit) : totalPages}</h3>
                     <button name='siguiente' onClick={changePage}>🢂</button>
                 </div>
             }

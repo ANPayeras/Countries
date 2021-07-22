@@ -9,8 +9,9 @@ import style from '../Home/Home.module.css';
 function OrderFilter({ page, setPage, watcher }) {
 
     const orderFilter = useSelector(state => state.orderFilter);
+    // console.log(orderFilter)
     // console.log('Order Filter', watcher.orders)
-
+  
     useEffect(() => {
         const changePages = () => {
             setPage({
@@ -28,7 +29,7 @@ function OrderFilter({ page, setPage, watcher }) {
         <div className={style.container}>
             {
                 orderFilter[0] && orderFilter.slice(page.currentPage * page.limit, page.nextPage * page.limit).map(e => (
-                    <Link to={`/detallepais/${e.id}`}>
+                    <Link to={`/countryDetail/${e.id}`}>
                         <div key={e.id} className={style.country}>
                             <div >
                                 <h3>{e.name}</h3>

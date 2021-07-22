@@ -19,7 +19,7 @@ export const getSearchedCountry = (country) => {
                     payload: res.data
                 })
             } else {
-                // console.log('No hay Pais')
+                console.log('No hay Pais')
             }
         } catch (error) {
             console.log(error)
@@ -32,7 +32,7 @@ export const getActivities = () => {
         const res = await axios.get('http://localhost:3001/activity')
         dispatch({
             type: 'GET_ACTIVITIES',
-            payload: res.data.respuesta
+            payload: res.data.response
         })
     }
 }
@@ -42,58 +42,60 @@ export const getCountryById = (id) => {
         const res = await axios.get(`http://localhost:3001/countries/${id}`)
         dispatch({
             type: 'GET_COUNTRYBYID',
-            payload: res.data.respuesta
+            payload: res.data.response
         })
     }
 }
 
 export const getContinents = (target, allCoun) => {
     return function (dispatch) {
-        let filtro = allCoun.filter(e => e.continente === target)
+        let filter = allCoun.filter(e => e.continente === target)
         dispatch({
             type: 'GET_CONTINENTES',
-            payload: filtro
+            payload: filter
         })
     }
 }
 
 export const getActivitiesByCountry = (target, allCoun) => {
     return function (dispatch) {
-        let filtro = allCoun.filter(e => e.name === target)
+        let filter = allCoun.filter(e => e.name === target)
         dispatch({
             type: 'GET_ACTBYCOUN',
-            payload: filtro
+            payload: filter
         })
     }
 }
 
 export const order = (option, direcction, countries) => {
     return function (dispatch) {
-        let allCountries2 = [...countries];
+        // console.log(option, direcction, countries)
+        let countriesOrder = [...countries];
         if (option === 'Nombre' && direcction === 'Ascendente') {
-            // const orderAsc = allCountries2.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
-            const orderAsc = allCountries2.sort((a, b) => (a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? 1 : a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? -1 : 0))
+            // const orderAsc = countriesOrder.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
+            const orderAsc = countriesOrder.sort((a, b) => (a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? 1 : a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? -1 : 0))
             // console.log(orderAsc)
             dispatch({
                 type: 'ORDER',
                 payload: orderAsc
             })
         } else if (option === 'Nombre' && direcction === 'Descendente') {
-            // const orderDesc = allCountries2.sort((a, b) => (a.name > b.name ? -1 : a.name < b.name ? 1 : 0))
-            const orderDesc = allCountries2.sort((a, b) => (a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? -1 : a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? 1 : 0))
+            // const orderDesc = countriesOrder.sort((a, b) => (a.name > b.name ? -1 : a.name < b.name ? 1 : 0))
+            const orderDesc = countriesOrder.sort((a, b) => (a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? -1 : a.name.localeCompare(b.name) > b.name.localeCompare(a.name) ? 1 : 0))
+            // console.log(orderDesc)
             dispatch({
                 type: 'ORDER',
                 payload: orderDesc
             })
         } else if (option === 'Poblacion' && direcction === 'Ascendente') {
-            const populationAsc = allCountries2.sort((a, b) => (a.population > b.population ? 1 : a.population < b.population ? -1 : 0))
+            const populationAsc = countriesOrder.sort((a, b) => (a.population > b.population ? 1 : a.population < b.population ? -1 : 0))
             // console.log(populationAsc)
             dispatch({
                 type: 'ORDER',
                 payload: populationAsc
             })
         } else if (option === 'Poblacion' && direcction === 'Descendente') {
-            const populationDesc = allCountries2.sort((a, b) => (a.population > b.population ? -1 : a.population < b.population ? 1 : 0))
+            const populationDesc = countriesOrder.sort((a, b) => (a.population > b.population ? -1 : a.population < b.population ? 1 : 0))
             // console.log(populationDesc)
             dispatch({
                 type: 'ORDER',

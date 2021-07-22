@@ -67,7 +67,7 @@ function PostActivity() {
 
     const sendActivity = async (activity) => {
         const { name, dificulty, duration, season, countryId } = activity;
-        if (!name || !dificulty || !duration || !season || !countryId) return alert('Todos los campos son obligatorios')
+        if (!name || !dificulty || !duration || !season || !countryId[0]) return alert('Todos los campos son obligatorios')
         if (errors) alert('La dificultad ' + errors.toLowerCase())
         const result = await axios.post('http://localhost:3001/activity', {
             name,

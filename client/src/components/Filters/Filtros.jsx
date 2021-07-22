@@ -8,25 +8,36 @@ import { useSelector, useDispatch } from 'react-redux';
 // Actions
 import { getAllCountries, getActivities, getContinents, getActivitiesByCountry, order } from 'C:/Users/Angel/Desktop/PI/PI-Countries/client/src/Redux/actions/actions.js';
 
-function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setShowActivityFilter, watcherFunction, showOrder, showByContinent, showActivityFilter }) {
+function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setShowActivityFilter, watcherFunction, showOrder, showByContinent, showActivityFilter, showAllCountry, setShowAllCountry, showCountry }) {
 
     const allCountries = useSelector(state => state.allCountries)
     const activities = useSelector(state => state.activities)
     const countriesByContinent = useSelector(state => state.countriesByContinent)
+
+    // console.log(allCountries)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getAllCountries());
         dispatch(getActivities());
-    }, [])
+    }, [dispatch])
 
     const [reset, setReset] = useState({
         continent: 'Empty',
         activity: ''
     })
-    console.log(reset)
+    console.log('reset', reset)
 
+    // Order Filters
+    const [orderFilter, setOrderFilter] = useState({
+        name: false,
+        option1: '',
+        option2: '',
+        conti: ''
+    })
+    const { option1, option2 } = orderFilter
+    console.log(orderFilter)
 
     const handlerOptionContinent = (e) => {
         let target = e.target.value;
@@ -34,7 +45,11 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
         if (target !== 'Empty') {
             setReset({
                 ...reset,
-                continent: e.target.value
+                continent: target
+            })
+            setOrderFilter({
+                ...orderFilter,
+                conti: target
             })
             dispatch(getContinents(target, allCountries));
             watcherFunction(target)
@@ -42,12 +57,8 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
             setShowActivityFilter(false)
             setShowCountry(false)
             setShowOrder(false)
-
-
         }
     }
-
-
 
     const handlerOptionActivity = (e) => {
         let target = e.target.value;
@@ -57,14 +68,12 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
         } else {
             setReset({
                 ...reset,
-                activity: e.target.value
+                activity: target
             })
             dispatch(getActivitiesByCountry(target, activities));
             setShowActivityFilter(true)
             setShowOrder(false)
             setShowContinent(false)
-
-
         }
     }
 
@@ -82,31 +91,27 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
     const actividadesFiltradas = new Set(actividades);
     let resultActividades = [...actividadesFiltradas];
 
-    // Orfer Filters
-    const [orderFilter, setOrderFilter] = useState({
-        name: false,
-        option1: '',
-        option2: ''
-    })
-    const { option1, option2 } = orderFilter
-
     useEffect(() => {
+
         const dispatchOrder = () => {
             // console.log(option1, option2)
-            if (option1 && option2) {
-                if (!showOrder && !showByContinent) {
-                    dispatch(order(option1, option2, allCountries))
-                    setShowOrder(true)
-                    setShowContinent(false)
-                    setShowCountry(false)
-                    setShowActivityFilter(false)
-                } else {
-                    dispatch(order(option1, option2, countriesByContinent))
-                    setShowOrder(true)
-                    setShowContinent(false)
-                    setShowCountry(false)
-                    setShowActivityFilter(false)
-                }
+            if (option1 && option2 && !orderFilter.conti) {
+
+                dispatch(order(option1, option2, allCountries))
+                setShowOrder(true)
+                setShowContinent(false)
+                setShowCountry(false)
+                setShowActivityFilter(false)
+                setShowAllCountry(false)
+            }
+            if (option1 && option2 && orderFilter.conti) {
+
+                dispatch(order(option1, option2, countriesByContinent))
+                setShowOrder(true)
+                setShowContinent(false)
+                setShowCountry(false)
+                setShowActivityFilter(false)
+                setShowAllCountry(false)
             }
         }
         dispatchOrder()
@@ -114,13 +119,19 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
 
     useEffect(() => {
         const onOff = () => {
-
-            if (!showOrder && !showByContinent) {
-                setOrderFilter({
-                    ...orderFilter,
-                    option1: '',
-                    option2: ''
-                })
+            /*    if (!showOrder && !showByContinent) {
+                    setOrderFilter({
+                       ...orderFilter,
+                       option1: '',
+                       option2: ''
+   
+                   }) 
+                   setReset({
+                       ...reset,
+                       continent: 'Empty'
+                   }) 
+               }  */
+            if (!showByContinent) {
                 setReset({
                     ...reset,
                     continent: 'Empty'
@@ -132,10 +143,49 @@ function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setS
                     activity: 'Empty'
                 })
             }
+            if (showActivityFilter) {
+                setOrderFilter({
+                    ...orderFilter,
+                    option1: '',
+                    option2: ''
+                })
+            }
         }
         onOff()
-        console.log(showOrder, showByContinent, showActivityFilter)
-    }, [showOrder, showByContinent, showActivityFilter])
+    }, [showOrder, showActivityFilter])
+
+    useEffect(() => {
+        if (!showOrder && !showByContinent) {
+            setReset({
+                ...reset,
+                continent: 'Empty'
+            })
+        }
+    }, [showOrder, showByContinent])
+
+    /* useEffect(() => {
+        if (!showOrder && !showByContinent) {
+            setOrderFilter({
+                ...orderFilter,
+                option1: '',
+                option2: ''
+            })
+        }
+    }, [showOrder]) */
+
+    useEffect(() => {
+        if (showAllCountry) {
+            setOrderFilter({
+                ...orderFilter,
+                conti: ''
+            })
+            setOrderFilter({
+                ...orderFilter,
+                option1: '',
+                option2: ''
+            })
+        }
+    }, [showAllCountry])
     console.log(showOrder, showByContinent, showActivityFilter)
 
     const orderHandler = (e) => {

@@ -1,0 +1,33 @@
+import React from 'react';
+import { configure, shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+import Home from './Home';
+import NavBar from '../NavBar/NavBar';
+
+
+configure({ adapter: new Adapter() });
+
+describe('<Home />', () => {
+    let wrapper;
+    beforeEach(() => {
+        wrapper = shallow(<Home />)
+    })
+
+    it('deberia renderizar 1 componente <NavBar />', () => {
+        expect(wrapper.find(NavBar)).toHaveLength(1)
+    })
+
+    it('Un componente Todos deberia recibir como prop status con el valor "Todo"', () => {
+        expect(wrapper.contains(<Todos status='Todo' />)).toEqual(true);
+    })
+
+    it('Un componente Todos deberia recibir como prop status con el valor "InProgress"', () => {
+        expect(wrapper.contains(<Todos status='InProgress' />)).toEqual(true);
+    })
+
+
+    it('Un componente Todos deberia recibir como prop status con el valor "Done"', () => {
+        expect(wrapper.contains(<Todos status='Done' />)).toEqual(true);
+    })
+});
