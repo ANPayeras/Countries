@@ -2,7 +2,7 @@ import React from 'react';
 
 // Redux
 import { useDispatch } from 'react-redux';
-import { getSearchedCountry } from 'C:/Users/Angel/Desktop/PI/PI-Countries/client/src/Redux/actions/actions.js';
+import { getSearchedCountry } from '../../Redux/actions/actions';
 // Styles
 import style from './SearchBar.module.css';
 

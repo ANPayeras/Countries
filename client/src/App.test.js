@@ -7,7 +7,7 @@ import { MemoryRouter } from 'react-router-dom'
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 
-import {App} from './App';
+import { App } from './App';
 import Home from './components/Home/Home';
 import DetallePais from './components/CountryDetail/CountryDetail';
 import PostActivity from './components/PostActivity/PostActivity';
@@ -35,7 +35,7 @@ describe('App', () => {
     store = mockStore([]);
   });
 
-  describe('El componente Enter solo en la ruta "/"', () => {
+  describe('El componente Enter solo se reenderiza en la ruta "/"', () => {
     it('Debería renderizarse en la ruta "/"', () => {
       const wrapper = mount(
         <Provider store={store}>
@@ -88,20 +88,4 @@ describe('App', () => {
     expect(container.find(AddTodo)).toHaveLength(1);
   });
 
-  xdescribe('Extra Credit', () => {
-
-    it('El componente TodoDetail debe renderizar en la ruta /edit/:id', () => {
-      const container = mount(
-        <Provider store={store}>
-          <MemoryRouter initialEntries={['/edit/1']}>
-            <App />
-          </MemoryRouter>
-        </Provider>
-      );
-      expect(container.find(Nav)).toHaveLength(1);
-      expect(container.find(Home)).toHaveLength(0);
-      expect(container.find(AddTodo)).toHaveLength(0);
-      expect(container.find(TodoDetail)).toHaveLength(1);
-    });
-  });
 });

@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import NavBarDetail from '../NavBarDetail/NavBarDetail';
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getCountryById } from 'C:/Users/Angel/Desktop/PI/PI-Countries/client/src/Redux/actions/actions.js';
+import { getCountryById } from '../../Redux/actions/actions';
 // Styles
 import style from './CountryDetail.module.css';
 

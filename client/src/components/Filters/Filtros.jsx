@@ -6,7 +6,7 @@ import style from './Filters.module.css'
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 // Actions
-import { getAllCountries, getActivities, getContinents, getActivitiesByCountry, order } from 'C:/Users/Angel/Desktop/PI/PI-Countries/client/src/Redux/actions/actions.js';
+import { getAllCountries, getActivities, getContinents, getActivitiesByCountry, order } from '../../Redux/actions/actions';
 
 function Filtros({ showAll, setShowOrder, setShowCountry, setShowContinent, setShowActivityFilter, watcherFunction, showOrder, showByContinent, showActivityFilter, showAllCountry, setShowAllCountry, showCountry }) {
 

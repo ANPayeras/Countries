@@ -6,7 +6,7 @@ import NavBarActivity from '../NavBarActivity/NavBarActivity';
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 // Actions
-import { getAllCountries } from 'C:/Users/Angel/Desktop/PI/PI-Countries/client/src/Redux/actions/actions.js';
+import { getAllCountries } from '../../Redux/actions/actions';
 // Styles 
 import styles from './PostActivity.module.css';
 

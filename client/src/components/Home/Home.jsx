@@ -7,7 +7,7 @@ import style from './Home.module.css'
 
 // Redux 
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllCountries } from 'C:/Users/Angel/Desktop/PI/PI-Countries/client/src/Redux/actions/actions.js';
+import { getAllCountries } from '../../Redux/actions/actions';
 
 // Components
 import Filtros from '../Filters/Filtros';
