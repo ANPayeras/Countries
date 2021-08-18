@@ -10,17 +10,24 @@ const allCountries = async (_req, _res, next) => {
         const paises = response.data;
 
         paises.map(async e => {
-            const result = await Country.create({
-                id: e.alpha3Code,
-                name: e.name,
-                flagimage: e.flag,
-                continente: e.region,
-                capital: e.capital,
-                subRegion: e.subregion,
-                area: e.area,
-                population: e.population
-            })
-            return result
+            try {
+                const result = await Country.findOrCreate({
+                    where: {
+                        id: e.alpha3Code,
+                        name: e.name,
+                        flagimage: e.flag,
+                        continente: e.region,
+                        capital: e.capital,
+                        subRegion: e.subregion,
+                        area: e.area,
+                        population: e.population
+                    }
+                })
+                return result
+            } catch (error) {
+                console.log(error)
+            }
+
         })
 
     } catch (error) {
